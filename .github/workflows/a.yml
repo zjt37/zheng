@@ -20,52 +20,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - name: 查询磁盘空间
-      run: |
-        echo "Before freeing up disk space"
-        echo "=============================================================================="
-        df -hT
-        echo "=============================================================================="
-
-    - name: 准备清理磁盘空间
-      uses: "hugoalh/disk-space-optimizer-ghaction@v0.8.1"
-      with:
-        operate_sudo: "True"
-        general_include: ".+"
-        general_exclude: |-
-          ^GCC$
-          ^G\+\+$
-          Clang
-          LLVM
-        docker_include: ".+"
-        docker_prune: "True"
-        docker_clean: "True"
-        apt_prune: "True"
-        apt_clean: "True"
-        homebrew_prune: "True"
-        homebrew_clean: "True"
-        npm_prune: "True"
-        npm_clean: "True"
-        os_swap: "True"
-
-    - name: 清理磁盘空间
-      uses: easimon/maximize-build-space@master
-      with: 
-        root-reserve-mb: 2048
-        swap-size-mb: 1
-        remove-dotnet: 'true'
-        remove-android: 'true'
-        remove-haskell: 'true'
-        remove-codeql: 'true'
-        remove-docker-images: 'true'
-
-    - name: 清理后磁盘空间
-      run: |
-        echo "Free up disk space complete"
-        echo "=============================================================================="
-        df -hT
-        echo "=============================================================================="
-    
     - name: 准备开始
       uses: actions/checkout@main
 
@@ -89,14 +43,13 @@ jobs:
         sudo -E timedatectl set-timezone "Asia/Shanghai"
         
     - name: 下载固件源码和软件包
-      working-directory: ./
       run: |
         # 下载固件源码
         git clone https://github.com/coolsnowwolf/lede
         
     - name: 上传固件
       uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE== 'true'
+      if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt
         path: lede/*
