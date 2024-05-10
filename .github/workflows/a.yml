@@ -15,8 +15,9 @@ on:
     types: [started]
     
 
-准备开始:
+jobs:
   build:
+    - name: 安装系统
     runs-on: ubuntu-22.04
 
     steps:
