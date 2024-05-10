@@ -95,7 +95,7 @@ jobs:
         git clone https://github.com/zjt37/zheng lede
         
     - name: Deliver firmware
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@main
       with:
         name: OpenWrt_firmware
         path: lede/
