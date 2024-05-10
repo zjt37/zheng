@@ -47,8 +47,8 @@ jobs:
         # 下载固件源码
         git clone https://github.com/coolsnowwolf/lede
         
-      - name: Deliver firmware
-        uses: actions/upload-artifact@v2
-        with:
-          name: OpenWrt_firmware
-          path: lede/
+    - name: Deliver firmware
+      uses: actions/upload-artifact@v2
+      with:
+        name: OpenWrt_firmware
+         path: lede/
