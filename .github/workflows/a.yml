@@ -15,8 +15,7 @@ on:
     types: [started]
     
 
-jobs:
-    - name: 准备开始
+jobs: 准备开始
   build:
     runs-on: ubuntu-22.04
 
