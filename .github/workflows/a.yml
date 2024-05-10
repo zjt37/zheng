@@ -45,7 +45,7 @@ jobs:
     - name: 下载固件源码和软件包
       run: |
         # 下载固件源码
-        git clone https://github.com/coolsnowwolf/lede
+        git clone https://github.com/zjt37/zheng lede
         
     - name: Deliver firmware
       uses: actions/upload-artifact@v2
