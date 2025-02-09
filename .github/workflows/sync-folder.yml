@@ -24,7 +24,7 @@ jobs:
 
       - name: Copy folder from other repository
         run: |
-          rm -rf luci-app-adguardhome
+          rm -rf ./luci-app-adguardhome
           cp -r ./zheng/luci-app-adguardhome ./
 
       - name: Commit and push changes
