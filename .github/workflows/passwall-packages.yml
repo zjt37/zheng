@@ -25,7 +25,12 @@ jobs:
           repository: xiaorouji/openwrt-passwall-packages  # 替换为你要复制的仓库
           token: ${{ secrets.SOURCE_REPO_TOKEN }}  # 如果源仓库是私有的
           path: passwall-packages  # 将其他仓库克隆到一个子目录
-
+          
+      - name: Copy folder from other repository
+        run: |
+          cd passwall-packages
+          rm -rf ./.github
+          
       - name: Commit and push changes
         run: |
           git config --global user.name "zjt37"
