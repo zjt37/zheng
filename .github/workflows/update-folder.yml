@@ -25,7 +25,7 @@ jobs:
     - name: Clone target repository
       run: |
         git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
-        rsync -av luci-app-adguardhome/luci-app-adguardhome aaa/
+        cp -r ./luci-app-adguardhome/luci-app-adguardhome ./aaa/
         cd aaa
         ls
 
