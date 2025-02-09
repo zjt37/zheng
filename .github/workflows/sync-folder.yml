@@ -2,7 +2,7 @@ name: Sync Folder from Another Repository
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 触发
+    - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
   workflow_dispatch:  # 允许手动触发
 
 jobs:
