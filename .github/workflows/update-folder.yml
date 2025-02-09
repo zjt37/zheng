@@ -24,9 +24,8 @@ jobs:
     
     - name: Clone target repository
       run: |
-        mkdir -p zheng
         git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
-        mv ./luci-app-adguardhome/luci-app-adguardhome/* zheng/luci-app-adguardhome/
+        mv ./luci-app-adguardhome/luci-app-adguardhome zheng/
         cd zheng
         ls
 
