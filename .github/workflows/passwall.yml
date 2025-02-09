@@ -1,0 +1,36 @@
+name: 同步更新passwall
+
+on:
+  schedule:
+    - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync-folder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SOURCE_REPO_TOKEN }} # 使用 PAT
+
+      - name: Checkout the other repository
+        uses: actions/checkout@v3
+        with:
+          repository: xiaorouji/openwrt-passwall  # 替换为你要复制的仓库
+          token: ${{ secrets.SOURCE_REPO_TOKEN }}  # 如果源仓库是私有的
+          path: zheng  # 将其他仓库克隆到一个子目录
+
+      - name: Copy folder from other repository
+        run: |
+          rm -rf ./luci-app-passwall
+          cp -r ./zheng/luci-app-passwall ./
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "zjt37"
+          git config --global user.email "27096491@qq.com"
+          git add ./luci-app-passwall
+          git commit -m "Copied folder from source repository"
+          git push
