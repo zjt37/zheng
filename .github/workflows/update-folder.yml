@@ -25,7 +25,7 @@ jobs:
 
     - name: Copy folder to target repository
       run: |
-        cp -r ./luci-app-adguardhome/luci-app-adguardhome ./zheng
+        cp -r ./luci-app-adguardhome ./zheng
         cd zheng
         git add .
         git commit -m "Automated folder update from source repository"
