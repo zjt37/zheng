@@ -33,4 +33,4 @@ jobs:
           git config --global user.email "27096491@qq.com"
           git add ./luci-app-adguardhome
           git commit -m "Copied folder from source repository"
-          git push origin main
+          git push
