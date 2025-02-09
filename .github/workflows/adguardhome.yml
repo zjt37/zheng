@@ -1,4 +1,4 @@
-name: Sync Folder from Another Repository
+name: 同步更新adguardhome
 
 on:
   schedule:
