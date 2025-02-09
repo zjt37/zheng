@@ -13,20 +13,21 @@ jobs:
     - name: Checkout source repository
       uses: actions/checkout@v3
 
-    - name: Clone target repository
-      env:
-        TARGET_REPO_TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
+      
+    - name: Add SSH key
       run: |
-        git clone https://$SOURCE_REPO_TOKEN@github.com/zjt37/aaa.git zheng
-        cd zheng
-        git config --global user.name "zjt37"
-        git config --global user.email "27096491@qq.com"
-        git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
+         mkdir -p ~/.ssh
+         echo "${{ secrets.TARGET_REPO_SSH_KEY }}" > ~/.ssh/id_rsa
+         chmod 600 ~/.ssh/id_rsa
+         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Copy folder to target repository
+    
+    - name: Clone target repository
       run: |
-        cp -r ./luci-app-adguardhome ./zheng
+        mkdir -p 
+        git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
+        cp -r ./luci-app-adguardhome/luci-app-adguardhome ./zheng
         cd zheng
-        git add .
-        git commit -m "Automated folder update from source repository"
-        git push
+        ls
+
+
