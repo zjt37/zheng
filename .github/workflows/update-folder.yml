@@ -26,7 +26,7 @@ jobs:
       run: |
         mkdir -p zheng
         git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
-        mv luci-app-adguardhome zheng/
+        mv ./luci-app-adguardhome/luci-app-adguardhome/* zheng/luci-app-adguardhome/
         cd zheng
         ls
 
