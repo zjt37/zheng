@@ -15,8 +15,10 @@ jobs:
         with:
           token: ${{ secrets.SOURCE_REPO_TOKEN }} # 使用 PAT
 
-      - name: Copy folder from other repository
+- name: Commit and push changes
         run: |
-          ls
-          rm -rf ./passwall-packages
-          ls
+          git config --global user.name "zjt37"
+          git config --global user.email "27096491@qq.com"
+          git rm ./passwall-package
+          git commit -m "删除文件：./passwall-package"
+          git push origin main        
