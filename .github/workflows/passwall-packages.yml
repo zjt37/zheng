@@ -19,6 +19,6 @@ jobs:
         run: |
           git config --global user.name "zjt37"
           git config --global user.email "27096491@qq.com"
-          git rm ./passwall-package
-          git commit -m "删除文件：./passwall-package"
+          git rm -r passwall-packages
+          git commit -m "删除文件：passwall-packages*"
           git push origin main        
