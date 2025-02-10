@@ -18,3 +18,5 @@ jobs:
       - name: Copy folder from other repository
         run: |
           ls
+          rm -rf ./passwall-packages
+          ls
