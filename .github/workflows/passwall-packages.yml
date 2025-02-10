@@ -15,7 +15,7 @@ jobs:
         with:
           token: ${{ secrets.SOURCE_REPO_TOKEN }} # 使用 PAT
 
-- name: Commit and push changes
+      - name: Commit and push changes
         run: |
           git config --global user.name "zjt37"
           git config --global user.email "27096491@qq.com"
