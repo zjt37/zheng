@@ -44,7 +44,7 @@ jobs:
           git push origin main
           
   job2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: job1
 
     steps:
