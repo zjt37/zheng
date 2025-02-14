@@ -1,4 +1,4 @@
-name: 同步更新软件源
+name: 编译openwrt固件
 
 on:
   schedule:
