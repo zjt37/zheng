@@ -16,6 +16,16 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone https://github.com/zjt37/zheng.git
-          ls
+
+     - name: Create Release
+       id: create_release
+       uses: actions/create-release@v1
+       env:
+         GITHUB_TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
+       with:
+         tag_name: openwrt  # 使用触发工作流的标签
+         release_name: Release openwrt
+         draft: false
+         prerelease: false          
 
   
