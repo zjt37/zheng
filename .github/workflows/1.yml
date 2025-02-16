@@ -23,8 +23,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
         with:
-          tag_name: openwrt  # 使用触发工作流的标签
-          release_name: Release openwrt
+          tag_name: ${{ github.ref_name }}  # 使用触发工作流的标签
+          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false      
           
