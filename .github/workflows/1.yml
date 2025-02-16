@@ -24,4 +24,5 @@ jobs:
         with:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
           file: zheng/clash.ini
+          asset_name: openclash.ini
           tag: openwrt          
