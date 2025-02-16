@@ -21,7 +21,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
-          file: zheng/openwrt.img
+          file: openwrt.img
           asset_name: openwrt.img
-          tag:  ${{ github.ref_name }}
+          tag: ${{ github.ref_name }}
         
