@@ -13,4 +13,6 @@ jobs:
       - name: 同步更新软件源
         uses: actions/checkout@v3
           
-
+      - name: Copy folder from source to target
+        run: |
+          git clone https://github.com/zjt37/zheng.git zheng
