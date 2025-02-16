@@ -23,5 +23,5 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
-          file: zheng/openwrt.img
+          file: zheng/clash.ini
           tag: openwrt          
