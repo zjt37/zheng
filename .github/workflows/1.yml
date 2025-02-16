@@ -15,7 +15,7 @@ jobs:
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/zjt37/zheng.git zheng
+          git clone https://github.com/zjt37/zheng.git
           
       - name: Upload firmware
         uses: svenstaro/upload-release-action@v2
