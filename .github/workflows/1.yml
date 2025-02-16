@@ -23,5 +23,5 @@ jobs:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
           file: zheng/openwrt.img
           asset_name: openwrt.img
-          tag:  openwrt
+          tag:  ${{ github.ref_name }}
         
