@@ -25,5 +25,5 @@ jobs:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
           file: zheng/clash.ini
           asset_name: openclash.ini
-          tag: openwrt-${{ env.CURRENT_TIMESTAMP }} 
+          tag: {{ github.ref_name }}-${{ env.CURRENT_TIMESTAMP }}
           overwrite: true
