@@ -15,7 +15,7 @@ jobs:
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/zjt37/zheng.git
+          git clone https://github.com/zjt37/zheng.git zheng
 
       - name: Create Release
         id: create_release
@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: openwrt.img
+          asset_path: zheng/*.img
           asset_name: openwrt.img
           asset_content_type: application/octet-stream
   
