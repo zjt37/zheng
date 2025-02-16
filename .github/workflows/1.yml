@@ -1,0 +1,21 @@
+name: 上传测试
+
+on:
+  schedule:
+    - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 同步更新软件源
+        uses: actions/checkout@v3
+
+      - name: Copy folder from source to target
+        run: |
+          git clone https://github.com/zjt37/zheng.git
+          ls
+
+  
