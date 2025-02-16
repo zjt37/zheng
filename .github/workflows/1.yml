@@ -18,16 +18,10 @@ jobs:
           git clone https://github.com/zjt37/zheng.git
           ls
 
-      - name: Create Release with Timestamp
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
-        with:
-          tag_name: openwrt-${{ env.CURRENT_TIMESTAMP }}  # 动态生成带时间的标签名
-          release_name: Release openwrt-${{ env.CURRENT_TIMESTAMP }}
-          draft: false
-          prerelease: false
+      - name: Get current timestamp
+        id: timestamp
+        run: |
+          echo "CURRENT_TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
           
 
 
