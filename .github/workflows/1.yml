@@ -1,4 +1,4 @@
-wrtname: 上传测试
+name: 编译openwrt固件
 
 on:
   schedule:
@@ -12,14 +12,5 @@ jobs:
     steps:
       - name: 同步更新软件源
         uses: actions/checkout@v3
-
-      - name: Copy folder from source to target
-        run: |
-          git clone https://github.com/TanZhiwen2001/luci-app-adguardhome.git
-          git clone https://github.com/vernesong/OpenClash.git
-          git clone https://github.com/xiaorouji/openwrt-passwall.git
-          cp -r ./luci-app-adguardhome/luci-app-adguardhome ./packages/
-          cp -r ./openwrt-passwall/luci-app-passwall ./packages/
-          cp -r ./OpenClash/luci-app-openclash ./packages/
           
 
