@@ -13,24 +13,24 @@ jobs:
       - name: 同步更新软件源
         uses: actions/checkout@v3
 
-    - name: Get Release ID
-      id: get-release
-      run: |
-        # 获取 Release ID
-        RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}" | jq -r '.id')
-        echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
+      - name: Get Release ID
+        id: get-release
+        run: |
+          # 获取 Release ID
+          RELEASE_ID=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}" | jq -r '.id')
+          echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
 
-    - name: Delete previous assets
-      run: |
-        # 获取 Release 中的所有资源
-        ASSETS=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}/assets" | jq -r '.[] | .id')
+      - name: Delete previous assets
+        run: |
+          # 获取 Release 中的所有资源
+          ASSETS=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}/assets" | jq -r '.[] | .id')
 
-        # 删除所有资源
-        for ASSET_ID in $ASSETS; do
-          curl -X DELETE \
-            -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/assets/$ASSET_ID"
-        done
+          # 删除所有资源
+          for ASSET_ID in $ASSETS; do
+            curl -X DELETE \
+              -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/assets/$ASSET_ID"
+          done
         
