@@ -17,7 +17,7 @@ jobs:
         id: get-release
         run: |
           # 获取最新 Release 的信息（排除草稿和预发布）
-          RELEASE_JSON=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          RELEASE_JSON=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/latest")
           RELEASE_ID=$(echo "$RELEASE_JSON" | jq -r '.id')
           TAG_NAME=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
@@ -31,11 +31,11 @@ jobs:
         run: |
           # 删除 Release
           curl -X DELETE \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}"
 
           # 删除关联的标签
           curl -X DELETE \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/${{ env.TAG_NAME }}"
         
