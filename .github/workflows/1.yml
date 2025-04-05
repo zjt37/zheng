@@ -55,6 +55,7 @@ jobs:
           cp -r ./helloworld/v2raya ./packages/helloworld/
           cp -r ./helloworld/xray-core ./packages/helloworld/
           cp -r ./helloworld/xray-plugin ./packages/helloworld/
+          cp -r ./helloworld/luci-app-ssr-plus ./packages/
           
           
 
