@@ -31,7 +31,7 @@ jobs:
         run: |
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
           cp -r ./OpenWrt-nikki/nikki ./packages/
-          cp -r ./OpenWrt-nikk/luci-app-nikki ./packages/
+          cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
 
       - name: Commit and push changes to target repository
         run: |
