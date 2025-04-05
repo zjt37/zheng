@@ -18,5 +18,6 @@ jobs:
 
       - name: Configure Git
         run: |
-          openssl passwd -1 "password"
-          mkpasswd -m md5 password
+          PASSWORD="password"
+          HASH=$(openssl passwd -1 "$PASSWORD")
+          echo "root:$HASH:0:0:99999:7:::"
