@@ -30,7 +30,6 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone https://github.com/fw876/helloworld.git
-          mkdir ./packages/helloworld
           cp -r ./helloworld/chinadns-ng ./packages/helloworld/
           cp -r ./helloworld/dns2socks ./packages/helloworld/
           cp -r ./helloworld/dns2tcp ./packages/helloworld/
