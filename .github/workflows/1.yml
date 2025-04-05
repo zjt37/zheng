@@ -29,9 +29,34 @@ jobs:
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
-          cp -r ./OpenWrt-nikki/nikki ./packages/
-          cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
+          git clone https://github.com/fw876/helloworld.git
+          mkdir ./packages/helloworld
+          cp -r ./helloworld/chinadns-ng ./packages/helloworld/
+          cp -r ./helloworld/dns2socks ./packages/helloworld/
+          cp -r ./helloworld/dns2tcp ./packages/helloworld/
+          cp -r ./helloworld/gn ./packages/helloworld/
+          cp -r ./helloworld/hysteria ./packages/helloworld/
+          cp -r ./helloworld/ipt2socks ./packages/helloworld/
+          cp -r ./helloworld/lua-neturl ./packages/helloworld/
+          cp -r ./helloworld/microsocks ./packages/helloworld/
+          cp -r ./helloworld/mosdns ./packages/helloworld/
+          cp -r ./helloworld/naiveproxy ./packages/helloworld/
+          cp -r ./helloworld/redsocks2 ./packages/helloworld/
+          cp -r ./helloworld/shadow-tls ./packages/helloworld/
+          cp -r ./helloworld/shadowsocks-libev ./packages/helloworld/
+          cp -r ./helloworld/shadowsocks-rust ./packages/helloworld/
+          cp -r ./helloworld/shadowsocksr-libev ./packages/helloworld/
+          cp -r ./helloworld/simple-obfs ./packages/helloworld/
+          cp -r ./helloworld/tcping ./packages/helloworld/
+          cp -r ./helloworld/trojan ./packages/helloworld/
+          cp -r ./helloworld/tuic-client ./packages/helloworld/
+          cp -r ./helloworld/v2ray-core ./packages/helloworld/
+          cp -r ./helloworld/v2ray-plugin ./packages/helloworld/
+          cp -r ./helloworld/v2raya ./packages/helloworld/
+          cp -r ./helloworld/xray-core ./packages/helloworld/
+          cp -r ./helloworld/xray-plugin ./packages/helloworld/
+          
+          
 
       - name: Commit and push changes to target repository
         run: |
