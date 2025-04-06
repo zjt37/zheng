@@ -30,6 +30,7 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
+          rm ./luci-theme-kucat/README.md
           cd luci-theme-kucat
           ls
           
