@@ -30,14 +30,12 @@ jobs:
           
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/jerrykuku/luci-theme-argon.git
-          mkdir -p packages/luci-theme-argon
-          cp -r ./luci-theme-argon/Screenshots ./packages/luci-theme-argon/
-          cp -r ./luci-theme-argon/htdocs ./packages/luci-theme-argon/
-          cp -r ./luci-theme-argon/less ./packages/luci-theme-argon/
-          cp -r ./luci-theme-argon/luasrc ./packages/luci-theme-argon/
-          cp -r ./luci-theme-argon/root ./packages/luci-theme-argon/
-          cp ./luci-theme-argon/Makefile ./packages/luci-theme-argon/
+          git clone https://github.com/jerrykuku/luci-app-argon-config.git
+          mkdir -p packages/luci-theme-argon-config
+          cp -r ./luci-theme-argon-config/htdocs ./packages/luci-theme-argon-config/
+          cp -r ./luci-theme-argon-config/po ./packages/luci-theme-argon-config/
+          cp -r ./luci-theme-argon-config/root ./packages/luci-theme-argon-config/
+          cp ./luci-theme-argon-config/Makefile ./packages/luci-theme-argon-config/
           
                     
           
