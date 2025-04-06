@@ -31,9 +31,11 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone https://github.com/jerrykuku/luci-app-argon-config.git
-          ls
-          cd luci-app-argon-config
-          ls
+          mkdir -p ./packages/luci-app-argon-config
+          cp -r ./luci-app-argon-config/htdocs ./packages/luci-app-argon-config/
+          cp -r ./luci-app-argon-config/po ./packages/luci-app-argon-config/
+          cp -r ./luci-app-argon-config/root ./packages/luci-app-argon-config/
+          cp ./luci-app-argon-config/Makefile ./packages/luci-app-argon-config/
                     
           
 
