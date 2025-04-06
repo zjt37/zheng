@@ -33,6 +33,7 @@ jobs:
           git clone https://github.com/xiaorouji/openwrt-passwall.git
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
           git clone https://github.com/fw876/helloworld.git
+          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./OpenWrt-nikki/nikki ./packages/
@@ -62,6 +63,10 @@ jobs:
           cp -r ./helloworld/xray-core ./packages/helloworld/
           cp -r ./helloworld/xray-plugin ./packages/helloworld/
           cp -r ./helloworld/luci-app-ssr-plus ./packages/
+          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
+          cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
 
       - name: Commit and push changes to target repository
         run: |
