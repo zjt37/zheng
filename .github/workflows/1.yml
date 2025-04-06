@@ -26,13 +26,24 @@ jobs:
           git clone https://${{ secrets.SOURCE_REPO_TOKEN }}@github.com/zjt37/packages.git
           cd packages
           git checkout main  # 切换到目标仓库的分支
-          git rm -r "luci-theme-kucat"
+
           
+      - name: Copy folder from source to target
+        run: |
+          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
+          mkdir -p packages/luci-theme-kucat
+          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
+          cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
+          
+          
+
       - name: Commit and push changes to target repository
         run: |
           cd packages
           git add .
-          git commit -m "删除特殊名称文件夹"
+          git commit --allow-empty -m "Sync folder from source repository (no changes detected)"
           git push origin main
           
 
