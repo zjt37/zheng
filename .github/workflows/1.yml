@@ -18,6 +18,25 @@ jobs:
 
       - name: Configure Git
         run: |
-          PASSWORD="password"
-          HASH=$(openssl passwd -1 "$PASSWORD")
-          echo "root:$HASH:0:0:99999:7:::"
+          git config --global user.name "zjt37"
+          git config --global user.email "27096491@qq.com"
+
+      - name: Clone target repository
+        run: |
+          git clone https://${{ secrets.SOURCE_REPO_TOKEN }}@github.com/zjt37/packages.git
+          cd packages
+          git checkout main  # 切换到目标仓库的分支
+
+      - name: Copy folder from source to target
+        run: |
+          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
+          rm -f ./luci-theme-kucat/README.md
+          cp -r ./luci-theme-kucat ./packages/
+          
+
+      - name: Commit and push changes to target repository
+        run: |
+          cd packages
+          git add .
+          git commit --allow-empty -m "Sync folder from source repository (no changes detected)"
+          git push origin main
