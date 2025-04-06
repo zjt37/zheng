@@ -36,6 +36,9 @@ jobs:
           cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
           cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
           cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
+          cd packages
+          cd luci-theme-kucat
+          ls
           
           
 
