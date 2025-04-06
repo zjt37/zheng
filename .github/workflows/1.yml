@@ -30,16 +30,16 @@ jobs:
           
       - name: Copy folder from source to target
         run: |
-          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
-          mkdir -p packages/luci-theme-kucat
-          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
-          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
-          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
-          cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
-          cd packages
-          cd luci-theme-kucat
-          ls
+          git clone https://github.com/jerrykuku/luci-theme-argon.git
+          mkdir -p packages/luci-theme-argon
+          cp -r ./luci-theme-argon/Screenshots ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/htdocs ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/less ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/luasrc ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/root ./packages/luci-theme-argon/
+          cp ./luci-theme-argon/Makefile ./packages/luci-theme-argon/
           
+                    
           
 
       - name: Commit and push changes to target repository
