@@ -156,10 +156,8 @@ jobs:
           sed -i "s|^root:[^:]*:|root:$HASH:|" package/base-files/files/etc/shadow
           sed -i 's/192.168.1.1/192.168.2.31/g' package/base-files/files/bin/config_generate
           sed -i 's/GMT0/CST-8/g' package/base-files/files/bin/config_generate
-          sed -i 's/${g}.*/${a}${b}${c}${d}${e}${f}${hydrid}/g' package/lean/autocore/files/x86/autocore
           sed -i 's/UTC/Asia\/Shanghai/g' package/base-files/files/bin/config_generate
           sed -i 's/services/system/g' feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
-          sed -i 's/os.date()/os.date("%Y-%m-%d %H:%M:%S")/g' package/lean/autocore/files/*/index.htm
 
       - name: 配置固件文件
         run: |
