@@ -34,6 +34,7 @@ jobs:
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
           git clone https://github.com/fw876/helloworld.git
           git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
+          git clone https://github.com/jerrykuku/luci-theme-argon.git
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./OpenWrt-nikki/nikki ./packages/
@@ -67,6 +68,12 @@ jobs:
           cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
           cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
           cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-argon/Screenshots ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/htdocs ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/less ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/luasrc ./packages/luci-theme-argon/
+          cp -r ./luci-theme-argon/root ./packages/luci-theme-argon/
+          cp ./luci-theme-argon/Makefile ./packages/luci-theme-argon/
 
       - name: Commit and push changes to target repository
         run: |
