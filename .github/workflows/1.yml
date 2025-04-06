@@ -32,10 +32,8 @@ jobs:
         run: |
           git clone https://github.com/jerrykuku/luci-app-argon-config.git
           mkdir -p packages/luci-theme-argon-config
-          cp -r ./luci-theme-argon-config/htdocs ./packages/luci-theme-argon-config/
-          cp -r ./luci-theme-argon-config/po ./packages/luci-theme-argon-config/
-          cp -r ./luci-theme-argon-config/root ./packages/luci-theme-argon-config/
-          cp ./luci-theme-argon-config/Makefile ./packages/luci-theme-argon-config/
+          cd luci-theme-argon-config
+          ls
           
                     
           
