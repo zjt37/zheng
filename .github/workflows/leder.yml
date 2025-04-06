@@ -35,6 +35,7 @@ jobs:
           git clone https://github.com/fw876/helloworld.git
           git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
           git clone https://github.com/jerrykuku/luci-theme-argon.git
+          git clone https://github.com/jerrykuku/luci-app-argon-config.git
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./OpenWrt-nikki/nikki ./packages/
@@ -74,6 +75,10 @@ jobs:
           cp -r ./luci-theme-argon/luasrc ./packages/luci-theme-argon/
           cp -r ./luci-theme-argon/root ./packages/luci-theme-argon/
           cp ./luci-theme-argon/Makefile ./packages/luci-theme-argon/
+          cp -r ./luci-app-argon-config/htdocs ./packages/luci-app-argon-config/
+          cp -r ./luci-app-argon-config/po ./packages/luci-app-argon-config/
+          cp -r ./luci-app-argon-config/root ./packages/luci-app-argon-config/
+          cp ./luci-app-argon-config/Makefile ./packages/luci-app-argon-config/
 
       - name: Commit and push changes to target repository
         run: |
