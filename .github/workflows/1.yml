@@ -31,7 +31,13 @@ jobs:
         run: |
           git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
           rm ./luci-theme-kucat/README.md
-          cd luci-theme-kucat
-          ls
+          cp -r ./luci-theme-kucat ./packages/
+
+      - name: Commit and push changes to target repository
+        run: |
+          cd packages
+          git add .
+          git commit --allow-empty -m "Sync folder from source repository (no changes detected)"
+          git push origin main
           
 
