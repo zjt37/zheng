@@ -145,10 +145,11 @@ jobs:
           PASSWORD="password"
           HASH=$(openssl passwd -1 "$PASSWORD")
           sed -i "s|^root:[^:]*:|root:$HASH:|" package/base-files/files/etc/shadow
-          sed -i 's/192.168.1.1/192.168.2.31/g' package/base-files/files/bin/config_generate
+          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
           sed -i 's/GMT0/CST-8/g' package/base-files/files/bin/config_generate
           sed -i 's/UTC/Asia\/Shanghai/g' package/base-files/files/bin/config_generate
           sed -i 's/services/system/g' feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
+          sed -i 's/ShadowSocksR Plus+/SSR Plus+/g' feeds/zheng/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
 
       - name: 配置固件文件
         run: |
@@ -162,6 +163,7 @@ jobs:
           # CONFIG_GRUB_CONSOLE is not set
           # CONFIG_GRUB_EFI_IMAGES is not set
           CONFIG_GRUB_TIMEOUT="0"
+          # CONFIG_KERNEL_IPV6_MROUTE is not set
           CONFIG_LIBCURL_COOKIES=y
           CONFIG_LIBCURL_FILE=y
           CONFIG_LIBCURL_FTP=y
@@ -170,13 +172,6 @@ jobs:
           CONFIG_LIBCURL_NGHTTP2=y
           CONFIG_LIBCURL_NO_SMB="!"
           CONFIG_LIBCURL_PROXY=y
-          # CONFIG_PACKAGE_ipv6helper is not set
-          # CONFIG_PACKAGE_dnsmasq_full_ipv6 is not set
-          CONFIG_KERNEL_IPV6=n
-          CONFIG_KERNEL_IPV6_MULTIPLE_TABLES=n
-          CONFIG_KERNEL_IPV6_SUBTREES=n
-          CONFIG_KERNEL_IPV6_MROUTE=n
-          CONFIG_IPV6=n
           CONFIG_LIBCURL_UNIX_SOCKETS=y
           CONFIG_LIBSODIUM_MINIMAL=y
           CONFIG_LUCI_LANG_zh_Hans=y
@@ -315,10 +310,10 @@ jobs:
           CONFIG_PACKAGE_luci-mod-network=y
           CONFIG_PACKAGE_luci-mod-status=y
           CONFIG_PACKAGE_luci-mod-system=y
-          CONFIG_PACKAGE_luci-proto-ipv6=y
+          #CONFIG_PACKAGE_luci-proto-ipv6 is not set
           CONFIG_PACKAGE_luci-proto-ppp=y
           CONFIG_PACKAGE_luci-theme-argon=y
-          CONFIG_PACKAGE_luci-theme-bootstrap=y
+          #CONFIG_PACKAGE_luci-theme-bootstrap is not set
           CONFIG_PACKAGE_microsocks=y
           CONFIG_PACKAGE_mosdns=y
           CONFIG_PACKAGE_netifyd=y
@@ -374,12 +369,17 @@ jobs:
           CONFIG_SINGBOX_WITH_REALITY_SERVER=y
           CONFIG_SINGBOX_WITH_UTLS=y
           CONFIG_SINGBOX_WITH_WIREGUARD=y
+          # CONFIG_TARGET_IMAGES_GZIP is not set
           CONFIG_TARGET_KERNEL_PARTSIZE=200
           # CONFIG_TARGET_ROOTFS_EXT4FS is not set
           CONFIG_TARGET_ROOTFS_PARTSIZE=400
           # CONFIG_TARGET_ROOTFS_TARGZ is not set
           # CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
-          # CONFIG_TARGET_IMAGES_GZIP is not set
+          CONFIG_KERNEL_IPV6=n
+          CONFIG_KERNEL_IPV6_MULTIPLE_TABLES=n
+          CONFIG_KERNEL_IPV6_SUBTREES=n
+          CONFIG_KERNEL_IPV6_MROUTE=n
+          CONFIG_IPV6=n
           EOF
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
