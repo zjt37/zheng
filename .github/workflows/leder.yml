@@ -33,9 +33,7 @@ jobs:
           git clone https://github.com/xiaorouji/openwrt-passwall.git
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
           git clone https://github.com/fw876/helloworld.git
-          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
           git clone https://github.com/jerrykuku/luci-theme-argon.git
-          git clone https://github.com/jerrykuku/luci-app-argon-config.git
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./OpenWrt-nikki/nikki ./packages/
@@ -65,20 +63,13 @@ jobs:
           cp -r ./helloworld/xray-core ./packages/helloworld/
           cp -r ./helloworld/xray-plugin ./packages/helloworld/
           cp -r ./helloworld/luci-app-ssr-plus ./packages/
-          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
-          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
-          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
-          cp ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
           cp -r ./luci-theme-argon/Screenshots ./packages/luci-theme-argon/
           cp -r ./luci-theme-argon/htdocs ./packages/luci-theme-argon/
           cp -r ./luci-theme-argon/less ./packages/luci-theme-argon/
           cp -r ./luci-theme-argon/luasrc ./packages/luci-theme-argon/
           cp -r ./luci-theme-argon/root ./packages/luci-theme-argon/
           cp ./luci-theme-argon/Makefile ./packages/luci-theme-argon/
-          cp -r ./luci-app-argon-config/htdocs ./packages/luci-app-argon-config/
-          cp -r ./luci-app-argon-config/po ./packages/luci-app-argon-config/
-          cp -r ./luci-app-argon-config/root ./packages/luci-app-argon-config/
-          cp ./luci-app-argon-config/Makefile ./packages/luci-app-argon-config/
+          
 
       - name: Commit and push changes to target repository
         run: |
@@ -179,12 +170,18 @@ jobs:
           CONFIG_LIBCURL_NGHTTP2=y
           CONFIG_LIBCURL_NO_SMB="!"
           CONFIG_LIBCURL_PROXY=y
+          # CONFIG_PACKAGE_ipv6helper is not set
+          # CONFIG_PACKAGE_dnsmasq_full_ipv6 is not set
+          CONFIG_KERNEL_IPV6=n
+          CONFIG_KERNEL_IPV6_MULTIPLE_TABLES=n
+          CONFIG_KERNEL_IPV6_SUBTREES=n
+          CONFIG_KERNEL_IPV6_MROUTE=n
+          CONFIG_IPV6=n
           CONFIG_LIBCURL_UNIX_SOCKETS=y
           CONFIG_LIBSODIUM_MINIMAL=y
           CONFIG_LUCI_LANG_zh_Hans=y
           CONFIG_NETIFYD_BUILD_SHARED_LIBRARY=y
           CONFIG_NETIFYD_WITH_LOCAL_LIBGCRYPT=y
-          CONFIG_OPENSSH_LIBFIDO2=y
           CONFIG_OPENSSL_ENGINE=y
           CONFIG_OPENSSL_OPTIMIZE_SPEED=y
           CONFIG_OPENSSL_WITH_ASM=y
@@ -199,8 +196,6 @@ jobs:
           CONFIG_OPENSSL_WITH_SRP=y
           CONFIG_OPENSSL_WITH_TLS13=y
           CONFIG_OPENSSL_WITH_WHIRLPOOL=y
-          CONFIG_PACKAGE_autossh=y
-          CONFIG_PACKAGE_avahi-dbus-daemon=y
           CONFIG_PACKAGE_bash=y
           CONFIG_PACKAGE_cgi-io=y
           CONFIG_PACKAGE_chinadns-ng=y
@@ -208,7 +203,6 @@ jobs:
           CONFIG_PACKAGE_coreutils-base64=y
           CONFIG_PACKAGE_coreutils-nohup=y
           CONFIG_PACKAGE_curl=y
-          CONFIG_PACKAGE_dbus=y
           CONFIG_PACKAGE_dns2socks=y
           CONFIG_PACKAGE_dns2tcp=y
           # CONFIG_PACKAGE_dnsmasq is not set
@@ -216,7 +210,6 @@ jobs:
           CONFIG_PACKAGE_dnsmasq_full_auth=y
           CONFIG_PACKAGE_dnsmasq_full_conntrack=y
           CONFIG_PACKAGE_dnsmasq_full_dhcp=y
-          # CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
           CONFIG_PACKAGE_dnsmasq_full_dnssec=y
           CONFIG_PACKAGE_dnsmasq_full_ipset=y
           CONFIG_PACKAGE_dnsmasq_full_noid=y
@@ -241,20 +234,12 @@ jobs:
           CONFIG_PACKAGE_kmod-nft-socket=y
           CONFIG_PACKAGE_kmod-tun=y
           CONFIG_PACKAGE_libatomic=y
-          CONFIG_PACKAGE_libavahi-dbus-support=y
           CONFIG_PACKAGE_libbpf=y
           CONFIG_PACKAGE_libcap=y
           CONFIG_PACKAGE_libcares=y
-          CONFIG_PACKAGE_libcbor=y
           CONFIG_PACKAGE_libcurl=y
-          CONFIG_PACKAGE_libdaemon=y
-          CONFIG_PACKAGE_libdbus=y
           CONFIG_PACKAGE_libelf=y
           CONFIG_PACKAGE_libev=y
-          CONFIG_PACKAGE_libevdev=y
-          CONFIG_PACKAGE_libevent2=y
-          CONFIG_PACKAGE_libexpat=y
-          CONFIG_PACKAGE_libfido2=y
           CONFIG_PACKAGE_libgcrypt=y
           CONFIG_PACKAGE_libgmp=y
           CONFIG_PACKAGE_libgpg-error=y
@@ -281,11 +266,9 @@ jobs:
           CONFIG_PACKAGE_libreadline=y
           CONFIG_PACKAGE_libruby=y
           CONFIG_PACKAGE_libsodium=y
-          CONFIG_PACKAGE_libssh=y
           CONFIG_PACKAGE_libstdcpp=y
           CONFIG_PACKAGE_libubus-lua=y
           CONFIG_PACKAGE_libuci-lua=y
-          CONFIG_PACKAGE_libudev-zero=y
           CONFIG_PACKAGE_libudns=y
           CONFIG_PACKAGE_libuv=y
           CONFIG_PACKAGE_libwebsockets-full=y
@@ -294,7 +277,6 @@ jobs:
           CONFIG_PACKAGE_lua=y
           CONFIG_PACKAGE_lua-neturl=y
           CONFIG_PACKAGE_luci=y
-          CONFIG_PACKAGE_luci-app-argon-config=y
           CONFIG_PACKAGE_luci-app-firewall=y
           CONFIG_PACKAGE_luci-app-nikki=y
           CONFIG_PACKAGE_luci-app-openclash=y
@@ -315,7 +297,6 @@ jobs:
           CONFIG_PACKAGE_luci-app-ttyd=y
           CONFIG_PACKAGE_luci-base=y
           CONFIG_PACKAGE_luci-compat=y
-          CONFIG_PACKAGE_luci-i18n-argon-config-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
           CONFIG_PACKAGE_luci-i18n-nikki-zh-cn=y
@@ -334,29 +315,15 @@ jobs:
           CONFIG_PACKAGE_luci-mod-network=y
           CONFIG_PACKAGE_luci-mod-status=y
           CONFIG_PACKAGE_luci-mod-system=y
-          # CONFIG_PACKAGE_luci-proto-ipv6 is not set
+          CONFIG_PACKAGE_luci-proto-ipv6=y
           CONFIG_PACKAGE_luci-proto-ppp=y
           CONFIG_PACKAGE_luci-theme-argon=y
           CONFIG_PACKAGE_luci-theme-bootstrap=y
-          CONFIG_PACKAGE_luci-theme-kucat=y
-          CONFIG_PACKAGE_luci-theme-material=y
           CONFIG_PACKAGE_microsocks=y
           CONFIG_PACKAGE_mosdns=y
-          CONFIG_PACKAGE_mosh-client=y
-          CONFIG_PACKAGE_mosh-server=y
-          CONFIG_PACKAGE_msgpack-c=y
           CONFIG_PACKAGE_netifyd=y
           CONFIG_PACKAGE_nikki=y
-          CONFIG_PACKAGE_openssh-client=y
-          CONFIG_PACKAGE_openssh-client-utils=y
-          CONFIG_PACKAGE_openssh-keygen=y
-          CONFIG_PACKAGE_openssh-moduli=y
-          CONFIG_PACKAGE_openssh-server=y
-          CONFIG_PACKAGE_openssh-sftp-avahi-service=y
-          CONFIG_PACKAGE_openssh-sftp-client=y
-          CONFIG_PACKAGE_openssh-sftp-server=y
-          CONFIG_PACKAGE_protobuf=y
-          CONFIG_PACKAGE_protobuf-lite=y
+          CONFIG_PACKAGE_opkg=y
           CONFIG_PACKAGE_resolveip=y
           CONFIG_PACKAGE_rpcd=y
           CONFIG_PACKAGE_rpcd-mod-file=y
@@ -384,10 +351,8 @@ jobs:
           CONFIG_PACKAGE_shadowsocksr-libev-ssr-server=y
           CONFIG_PACKAGE_simple-obfs-client=y
           CONFIG_PACKAGE_sing-box=y
-          CONFIG_PACKAGE_sshtunnel=y
           CONFIG_PACKAGE_tcping=y
           CONFIG_PACKAGE_terminfo=y
-          CONFIG_PACKAGE_tmate=y
           CONFIG_PACKAGE_ttyd=y
           CONFIG_PACKAGE_ucode-mod-html=y
           CONFIG_PACKAGE_ucode-mod-lua=y
@@ -400,7 +365,6 @@ jobs:
           CONFIG_PACKAGE_xray-core=y
           CONFIG_PACKAGE_xtables-nft=y
           CONFIG_PACKAGE_yq=y
-          CONFIG_PACKAGE_zlib=y
           CONFIG_PCRE2_JIT_ENABLED=y
           CONFIG_RUBY_ENABLE_YJIT=y
           CONFIG_SINGBOX_WITH_CLASH_API=y
@@ -410,10 +374,11 @@ jobs:
           CONFIG_SINGBOX_WITH_REALITY_SERVER=y
           CONFIG_SINGBOX_WITH_UTLS=y
           CONFIG_SINGBOX_WITH_WIREGUARD=y
-          # CONFIG_TARGET_IMAGES_GZIP is not set
+          CONFIG_TARGET_KERNEL_PARTSIZE=200
           # CONFIG_TARGET_ROOTFS_EXT4FS is not set
-          CONFIG_TARGET_ROOTFS_PARTSIZE=600
+          CONFIG_TARGET_ROOTFS_PARTSIZE=400
           # CONFIG_TARGET_ROOTFS_TARGZ is not set
+          # CONFIG_PACKAGE_dnsmasq_full_dhcpv6 is not set
           EOF
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
@@ -435,7 +400,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: OpenWrt
-          path: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+          path: lede/bin/targets/x86/64/*
 
       - name: 获取release ID
         id: get-release
