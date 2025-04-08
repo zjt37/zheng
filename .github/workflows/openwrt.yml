@@ -6,16 +6,13 @@ on:
   workflow_dispatch:  # 允许手动触发
 
 jobs:
-  job1:
+  build:
     runs-on: ubuntu-22.04
-    needs: job1
+    if: github.event.repository.owner.id == github.event.sender.id
 
     steps:
       - name: 准备开始
         uses: actions/checkout@main
-
-      - name: Run another script
-        run: echo "This is job2, running after job1"
 
       - name: 清理磁盘空间
         uses: easimon/maximize-build-space@master
