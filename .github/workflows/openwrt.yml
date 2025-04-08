@@ -14,13 +14,6 @@ jobs:
       - name: 准备开始
         uses: actions/checkout@main
 
-steps:
-      - name: 准备开始
-        uses: actions/checkout@main
-
-      - name: Run another script
-        run: echo "This is job2, running after job1"
-
       - name: 清理磁盘空间
         uses: easimon/maximize-build-space@master
         with: 
