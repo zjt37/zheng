@@ -70,6 +70,7 @@ jobs:
           sed -i 's/192.168.1.1/192.168.2.31/g' package/base-files/files/bin/config_generate
           sed -i "s/hostname='.*'/hostname='openwrt'/g" package/base-files/files/bin/config_generate
           
+          
 
       - name: 配置固件文件
         run: |
