@@ -335,12 +335,6 @@ jobs:
           echo -e "$(nproc) thread build."
           make -j$(nproc) V=s
 
-      - name: 上传固件
-        uses: actions/upload-artifact@main
-        with:
-          name: OpenWrt
-          path: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-
       - name: 获取release ID
         id: get-release
         run: |
