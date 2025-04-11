@@ -25,13 +25,17 @@ jobs:
         run: |
           git clone https://${{ secrets.SOURCE_REPO_TOKEN }}@github.com/zjt37/packages.git
           cd packages
+          mkdir luci-theme-kucat
           git checkout main  # 切换到目标仓库的分支
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
-          cp -r ./OpenWrt-nikki/nikki ./packages/
-          cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
+          git clone -b jshttps://github.com/sirpdboy/luci-theme-kucat.git
+          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
+         
           
 
       - name: Commit and push changes to target repository
