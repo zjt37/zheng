@@ -2,339 +2,41 @@ name: 测试
 
 on:
   schedule:
-    - cron: '0 0 * * 6'  # 每星期五 UTC 时间 00:00 触发
+    - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
   workflow_dispatch:  # 允许手动触发
 
 jobs:
-  build:
-    runs-on: ubuntu-22.04
-    if: github.event.repository.owner.id == github.event.sender.id
+  job1:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: 准备开始
-        uses: actions/checkout@main
+      - name: 同步更新软件源
+        uses: actions/checkout@v3
+        
+      - name: Run a script
+        run: echo "This is job1"
 
-      - name: 清理磁盘空间
-        uses: easimon/maximize-build-space@master
-        with: 
-          root-reserve-mb: 2048
-          swap-size-mb: 1
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
+      - name: Configure Git
+        run: |
+          git config --global user.name "zjt37"
+          git config --global user.email "27096491@qq.com"
 
-      - name: 安装系统依赖
-        env:
-          DEBIAN_FRONTEND: noninteractive
+      - name: Clone target repository
         run: |
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
-          bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
-          git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libglib2.0-dev libgmp3-dev libltdl-dev \
-          libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libreadline-dev libssl-dev libtool lrzsz \
-          mkisofs msmtp nano ninja-build p7zip p7zip-full patch pkgconf python2.7 python3 python3-pyelftools \
-          libpython3-dev qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
-          vim wget xmlto xxd zlib1g-dev python3-setuptools whois
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/local/lib/android /opt/ghc /usr/share/dotnet /usr/local/graalvm /usr/local/.ghcup \
-          /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/node_modules
-          sudo -E systemctl daemon-reload
-          sudo -E timedatectl set-timezone "Asia/Shanghai"
-      
-      - name: 下载固件源码
-        working-directory: ./
-        run: |
-          git clone -b openwrt-23.05 --single-branch --depth=1 https://github.com/openwrt/openwrt.git lede
+          git clone https://${{ secrets.SOURCE_REPO_TOKEN }}@github.com/zjt37/packages.git
+          cd packages
+          git checkout main  # 切换到目标仓库的分支
 
-      - name: 更新和安装软件包
+      - name: Copy folder from source to target
         run: |
-          cd lede
-          echo "src-git zheng https://github.com/zjt37/packages.git;main" >> "feeds.conf.default"
-          echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
-          echo "src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main" >> "feeds.conf.default"
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-          ./scripts/feeds install -a
-
-      - name: 常用配置修改
-        run: |
-          cd lede
-          sed -i 's/192.168.1.1/192.168.2.31/g' package/base-files/files/bin/config_generate
-          sed -i 's/UTC/CST-8/g' package/base-files/files/bin/config_generate
-          PASSWORD="password"
-          HASH=$(mkpasswd -m sha-512 "$PASSWORD")
-          echo "root:${HASH}:0:0:99999:7:::" > package/base-files/files/etc/shadow
+          git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
+          cp -r ./OpenWrt-nikki/nikki ./packages/
+          cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
           
 
-      - name: 配置固件文件
+      - name: Commit and push changes to target repository
         run: |
-          cd lede
-          rm -f ./.config*
-          touch ./.config
-          cat >> .config <<EOF
-          CONFIG_TARGET_x86=y
-          CONFIG_TARGET_x86_64=y
-          CONFIG_TARGET_x86_64_DEVICE_generic=y
-          # CONFIG_GRUB_EFI_IMAGES is not set
-          CONFIG_GRUB_TIMEOUT="0"
-          CONFIG_LIBCURL_COOKIES=y
-          CONFIG_LIBCURL_FILE=y
-          CONFIG_LIBCURL_FTP=y
-          CONFIG_LIBCURL_HTTP=y
-          CONFIG_LIBCURL_MBEDTLS=y
-          CONFIG_LIBCURL_NGHTTP2=y
-          CONFIG_LIBCURL_NO_SMB="!"
-          CONFIG_LIBCURL_PROXY=y
-          CONFIG_LIBCURL_UNIX_SOCKETS=y
-          CONFIG_LIBSODIUM_MINIMAL=y
-          CONFIG_LUCI_LANG_zh_Hans=y
-          CONFIG_NETIFYD_BUILD_SHARED_LIBRARY=y
-          CONFIG_NETIFYD_WITH_LOCAL_LIBGCRYPT=y
-          CONFIG_OPENSSH_LIBFIDO2=y
-          CONFIG_OPENSSL_ENGINE=y
-          CONFIG_OPENSSL_OPTIMIZE_SPEED=y
-          CONFIG_OPENSSL_WITH_ASM=y
-          CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
-          CONFIG_OPENSSL_WITH_CMS=y
-          CONFIG_OPENSSL_WITH_DEPRECATED=y
-          CONFIG_OPENSSL_WITH_ERROR_MESSAGES=y
-          CONFIG_OPENSSL_WITH_IDEA=y
-          CONFIG_OPENSSL_WITH_MDC2=y
-          CONFIG_OPENSSL_WITH_PSK=y
-          CONFIG_OPENSSL_WITH_SEED=y
-          CONFIG_OPENSSL_WITH_SRP=y
-          CONFIG_OPENSSL_WITH_TLS13=y
-          CONFIG_OPENSSL_WITH_WHIRLPOOL=y
-          CONFIG_PACKAGE_autossh=y
-          CONFIG_PACKAGE_avahi-dbus-daemon=y
-          CONFIG_PACKAGE_bash=y
-          CONFIG_PACKAGE_cgi-io=y
-          CONFIG_PACKAGE_chinadns-ng=y
-          CONFIG_PACKAGE_coreutils=y
-          CONFIG_PACKAGE_coreutils-base64=y
-          CONFIG_PACKAGE_coreutils-nohup=y
-          CONFIG_PACKAGE_curl=y
-          CONFIG_PACKAGE_dbus=y
-          CONFIG_PACKAGE_dns2socks=y
-          CONFIG_PACKAGE_dns2tcp=y
-          # CONFIG_PACKAGE_dnsmasq is not set
-          CONFIG_PACKAGE_dnsmasq-full=y
-          CONFIG_PACKAGE_dnsmasq_full_auth=y
-          CONFIG_PACKAGE_dnsmasq_full_conntrack=y
-          CONFIG_PACKAGE_dnsmasq_full_dhcp=y
-          CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
-          CONFIG_PACKAGE_dnsmasq_full_dnssec=y
-          CONFIG_PACKAGE_dnsmasq_full_ipset=y
-          CONFIG_PACKAGE_dnsmasq_full_noid=y
-          CONFIG_PACKAGE_dnsmasq_full_tftp=y
-          # CONFIG_PACKAGE_grub2-efi is not set
-          CONFIG_PACKAGE_haproxy=y
-          CONFIG_PACKAGE_ip-full=y
-          CONFIG_PACKAGE_ipset=y
-          CONFIG_PACKAGE_ipt2socks=y
-          CONFIG_PACKAGE_iptables-mod-tproxy=y
-          CONFIG_PACKAGE_iptables-nft=y
-          CONFIG_PACKAGE_jq=y
-          CONFIG_PACKAGE_kmod-inet-diag=y
-          CONFIG_PACKAGE_kmod-ipt-core=y
-          CONFIG_PACKAGE_kmod-ipt-ipset=y
-          CONFIG_PACKAGE_kmod-ipt-nat=y
-          CONFIG_PACKAGE_kmod-ipt-tproxy=y
-          CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
-          CONFIG_PACKAGE_kmod-nf-ipt=y
-          CONFIG_PACKAGE_kmod-nf-socket=y
-          CONFIG_PACKAGE_kmod-nft-compat=y
-          CONFIG_PACKAGE_kmod-nft-socket=y
-          CONFIG_PACKAGE_kmod-tun=y
-          CONFIG_PACKAGE_libatomic=y
-          CONFIG_PACKAGE_libavahi-dbus-support=y
-          CONFIG_PACKAGE_libbpf=y
-          CONFIG_PACKAGE_libcares=y
-          CONFIG_PACKAGE_libcbor=y
-          CONFIG_PACKAGE_libcurl=y
-          CONFIG_PACKAGE_libdaemon=y
-          CONFIG_PACKAGE_libdbus=y
-          CONFIG_PACKAGE_libelf=y
-          CONFIG_PACKAGE_libev=y
-          CONFIG_PACKAGE_libevdev=y
-          CONFIG_PACKAGE_libevent2=y
-          CONFIG_PACKAGE_libexpat=y
-          CONFIG_PACKAGE_libfido2=y
-          CONFIG_PACKAGE_libgcrypt=y
-          CONFIG_PACKAGE_libgmp=y
-          CONFIG_PACKAGE_libgpg-error=y
-          CONFIG_PACKAGE_libipset=y
-          CONFIG_PACKAGE_libiptext=y
-          CONFIG_PACKAGE_libiptext-nft=y
-          CONFIG_PACKAGE_libiptext6=y
-          CONFIG_PACKAGE_libiwinfo=y
-          CONFIG_PACKAGE_libiwinfo-data=y
-          CONFIG_PACKAGE_libltdl=y
-          CONFIG_PACKAGE_liblua=y
-          CONFIG_PACKAGE_liblua5.3=y
-          CONFIG_PACKAGE_liblucihttp=y
-          CONFIG_PACKAGE_liblucihttp-lua=y
-          CONFIG_PACKAGE_liblucihttp-ucode=y
-          CONFIG_PACKAGE_libncurses=y
-          CONFIG_PACKAGE_libnetfilter-conntrack=y
-          CONFIG_PACKAGE_libnettle=y
-          CONFIG_PACKAGE_libnfnetlink=y
-          CONFIG_PACKAGE_libnghttp2=y
-          CONFIG_PACKAGE_libopenssl=y
-          CONFIG_PACKAGE_libpcap=y
-          CONFIG_PACKAGE_libpcre2=y
-          CONFIG_PACKAGE_libreadline=y
-          CONFIG_PACKAGE_libruby=y
-          CONFIG_PACKAGE_libsodium=y
-          CONFIG_PACKAGE_libssh=y
-          CONFIG_PACKAGE_libstdcpp=y
-          CONFIG_PACKAGE_libubus-lua=y
-          CONFIG_PACKAGE_libuci-lua=y
-          CONFIG_PACKAGE_libudev-zero=y
-          CONFIG_PACKAGE_libudns=y
-          CONFIG_PACKAGE_libxtables=y
-          CONFIG_PACKAGE_libyaml=y
-          CONFIG_PACKAGE_lua=y
-          CONFIG_PACKAGE_lua-neturl=y
-          CONFIG_PACKAGE_luci=y
-          CONFIG_PACKAGE_luci-app-firewall=y
-          CONFIG_PACKAGE_luci-app-nikki=y
-          CONFIG_PACKAGE_luci-app-openclash=y
-          CONFIG_PACKAGE_luci-app-opkg=y
-          CONFIG_PACKAGE_luci-app-passwall=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Geoview=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
-          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
-          CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
-          CONFIG_PACKAGE_luci-app-ssr-plus=y
-          CONFIG_PACKAGE_luci-base=y
-          CONFIG_PACKAGE_luci-compat=y
-          CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
-          CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
-          CONFIG_PACKAGE_luci-i18n-nikki-zh-cn=y
-          CONFIG_PACKAGE_luci-i18n-opkg-zh-cn=y
-          CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
-          CONFIG_PACKAGE_luci-i18n-ssr-plus-zh-cn=y
-          CONFIG_PACKAGE_luci-lib-base=y
-          CONFIG_PACKAGE_luci-lib-ip=y
-          CONFIG_PACKAGE_luci-lib-ipkg=y
-          CONFIG_PACKAGE_luci-lib-jsonc=y
-          CONFIG_PACKAGE_luci-lib-nixio=y
-          CONFIG_PACKAGE_luci-light=y
-          CONFIG_PACKAGE_luci-lua-runtime=y
-          CONFIG_PACKAGE_luci-mod-admin-full=y
-          CONFIG_PACKAGE_luci-mod-network=y
-          CONFIG_PACKAGE_luci-mod-status=y
-          CONFIG_PACKAGE_luci-mod-system=y
-          CONFIG_PACKAGE_luci-proto-ipv6=y
-          CONFIG_PACKAGE_luci-proto-ppp=y
-          CONFIG_PACKAGE_luci-theme-atmaterial_new=y
-          CONFIG_PACKAGE_luci-theme-bootstrap=y
-          CONFIG_PACKAGE_microsocks=y
-          CONFIG_PACKAGE_mosdns=y
-          CONFIG_PACKAGE_msgpack-c=y
-          CONFIG_PACKAGE_netifyd=y
-          CONFIG_PACKAGE_nikki=y
-          CONFIG_PACKAGE_openssh-client=y
-          CONFIG_PACKAGE_openssh-client-utils=y
-          CONFIG_PACKAGE_openssh-keygen=y
-          CONFIG_PACKAGE_openssh-moduli=y
-          CONFIG_PACKAGE_openssh-server=y
-          CONFIG_PACKAGE_openssh-sftp-avahi-service=y
-          CONFIG_PACKAGE_openssh-sftp-client=y
-          CONFIG_PACKAGE_openssh-sftp-server=y
-          CONFIG_PACKAGE_resolveip=y
-          CONFIG_PACKAGE_rpcd=y
-          CONFIG_PACKAGE_rpcd-mod-file=y
-          CONFIG_PACKAGE_rpcd-mod-iwinfo=y
-          CONFIG_PACKAGE_rpcd-mod-luci=y
-          CONFIG_PACKAGE_rpcd-mod-rrdns=y
-          CONFIG_PACKAGE_rpcd-mod-ucode=y
-          CONFIG_PACKAGE_ruby=y
-          CONFIG_PACKAGE_ruby-bigdecimal=y
-          CONFIG_PACKAGE_ruby-date=y
-          CONFIG_PACKAGE_ruby-digest=y
-          CONFIG_PACKAGE_ruby-enc=y
-          CONFIG_PACKAGE_ruby-forwardable=y
-          CONFIG_PACKAGE_ruby-pstore=y
-          CONFIG_PACKAGE_ruby-psych=y
-          CONFIG_PACKAGE_ruby-stringio=y
-          CONFIG_PACKAGE_ruby-yaml=y
-          CONFIG_PACKAGE_shadowsocks-libev-config=y
-          CONFIG_PACKAGE_shadowsocks-libev-ss-local=y
-          CONFIG_PACKAGE_shadowsocks-libev-ss-redir=y
-          CONFIG_PACKAGE_shadowsocks-libev-ss-server=y
-          CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
-          CONFIG_PACKAGE_shadowsocksr-libev-ssr-check=y
-          CONFIG_PACKAGE_shadowsocksr-libev-ssr-local=y
-          CONFIG_PACKAGE_shadowsocksr-libev-ssr-redir=y
-          CONFIG_PACKAGE_shadowsocksr-libev-ssr-server=y
-          CONFIG_PACKAGE_simple-obfs-client=y
-          CONFIG_PACKAGE_sing-box=y
-          CONFIG_PACKAGE_sshtunnel=y
-          CONFIG_PACKAGE_tcping=y
-          CONFIG_PACKAGE_terminfo=y
-          CONFIG_PACKAGE_tmate=y
-          CONFIG_PACKAGE_ucode-mod-html=y
-          CONFIG_PACKAGE_ucode-mod-lua=y
-          CONFIG_PACKAGE_ucode-mod-math=y
-          CONFIG_PACKAGE_uhttpd=y
-          CONFIG_PACKAGE_uhttpd-mod-ubus=y
-          CONFIG_PACKAGE_unzip=y
-          CONFIG_PACKAGE_v2ray-plugin=y
-          CONFIG_PACKAGE_wget-ssl=y
-          CONFIG_PACKAGE_xray-core=y
-          CONFIG_PACKAGE_xtables-nft=y
-          CONFIG_PACKAGE_yq=y
-          CONFIG_PACKAGE_zlib=y
-          CONFIG_PCRE2_JIT_ENABLED=y
-          CONFIG_SINGBOX_WITH_CLASH_API=y
-          CONFIG_SINGBOX_WITH_ECH=y
-          CONFIG_SINGBOX_WITH_GVISOR=y
-          CONFIG_SINGBOX_WITH_QUIC=y
-          CONFIG_SINGBOX_WITH_REALITY_SERVER=y
-          CONFIG_SINGBOX_WITH_UTLS=y
-          CONFIG_SINGBOX_WITH_WIREGUARD=y
-          # CONFIG_TARGET_IMAGES_GZIP is not set
-          CONFIG_TARGET_KERNEL_PARTSIZE=200
-          # CONFIG_TARGET_ROOTFS_EXT4FS is not set
-          CONFIG_TARGET_ROOTFS_PARTSIZE=600
-          # CONFIG_TARGET_ROOTFS_TARGZ is not set
-          EOF
-          sed -i 's/^[ \t]*//g' ./.config
-          make defconfig
-  
-      - name: 下载DL库
-        run: |
-          cd lede
-          make download -j8
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
-
-      - name: 开始编译固件
-        run: |
-          cd lede
-          echo -e "$(nproc) thread build."
-          make -j$(nproc) V=s
-
-      - name: 上传固件
-        uses: actions/upload-artifact@main
-        with:
-          name: OpenWrt
-          path: lede/bin/targets/x86/64/*
-
-
-
-
-
-          
+          cd packages
+          git add .
+          git commit --allow-empty -m "Sync folder from source repository (no changes detected)"
+          git push origin main
