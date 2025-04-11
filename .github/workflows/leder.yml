@@ -32,6 +32,11 @@ jobs:
           git clone https://github.com/vernesong/OpenClash.git
           git clone https://github.com/xiaorouji/openwrt-passwall.git
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
+          git clone -b js https://github.com/sirpdboy/luci-theme-kucat.git
+          cp -r ./luci-theme-kucat/htdocs ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/luasrc ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/root ./packages/luci-theme-kucat/
+          cp -r ./luci-theme-kucat/Makefile ./packages/luci-theme-kucat/
           cp -r ./OpenWrt-nikki/nikki ./packages/
           cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
