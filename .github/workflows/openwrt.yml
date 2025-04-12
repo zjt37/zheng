@@ -30,11 +30,8 @@ jobs:
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/sirpdboy/luci-app-advancedplus.git
-          cp -r ./luci-app-advancedplus/luasrc ./packages/luci-app-advancedplus/
-          cp -r ./luci-app-advancedplus/po ./packages/luci-app-advancedplus/
-          cp -r ./luci-app-advancedplus/root ./packages/luci-app-advancedplus/
-          cp -r ./luci-app-advancedplus/Makefile ./packages/luci-app-advancedplus/
+          git clone https://github.com/fw876/helloworld.git
+          cp -r ./helloworld/luci-app-ssr-plus ./packages/
          
           
 
