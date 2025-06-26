@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
       timezone: 'Asia/Shanghai' 
+  workflow_dispatch:
 
 jobs:
   job1:
