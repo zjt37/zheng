@@ -2,8 +2,7 @@ name: 编译openwrt固件
 
 on:
   schedule:
-    - cron: '0 0 * * 5'  # 每星期五 UTC 时间 00:00 触发
-      timezone: 'Asia/Shanghai' 
+    - cron: '0 0 * * 5'
   workflow_dispatch:
 
 jobs:
@@ -12,8 +11,8 @@ jobs:
 
     steps:
       - name: 同步更新软件源
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Run a script
         run: echo "This is job1"
 
@@ -28,7 +27,6 @@ jobs:
           remove-codeql: 'true'
           remove-docker-images: 'true'
 
-          
       - name: Configure Git
         run: |
           git config --global user.name "zjt37"
@@ -38,7 +36,7 @@ jobs:
         run: |
           git clone https://${{ secrets.SOURCE_REPO_TOKEN }}@github.com/zjt37/packages.git
           cd packages
-          git checkout main  # 切换到目标仓库的分支
+          git checkout main
 
       - name: Copy folder from source to target
         run: |
@@ -49,23 +47,25 @@ jobs:
           cp -r ./OpenWrt-nikki/nikki ./packages/
           cp -r ./OpenWrt-nikki/luci-app-nikki ./packages/
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
-          
-          
 
       - name: Commit and push changes to target repository
         run: |
           cd packages
           git add .
-          git commit --allow-empty -m "Sync folder from source repository (no changes detected)"
-          git push origin main
-          
+          if git diff --cached --quiet; then
+            echo "No changes detected, skipping commit"
+          else
+            git commit -m "Sync folder from source repository"
+            git push origin main
+          fi
+
   job2:
     runs-on: ubuntu-22.04
     needs: job1
 
     steps:
       - name: 准备开始
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Run another script
         run: echo "This is job2, running after job1"
@@ -355,25 +355,19 @@ jobs:
       - name: 获取release ID
         id: get-release
         run: |
-          # 获取最新 Release 的信息（排除草稿和预发布）
           RELEASE_JSON=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/latest")
           RELEASE_ID=$(echo "$RELEASE_JSON" | jq -r '.id')
           TAG_NAME=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
-
-          # 输出变量供后续步骤使用
           echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
 
       - name: 删除上次release
         if: env.RELEASE_ID != 'null'
         run: |
-          # 删除 Release
           curl -X DELETE \
             -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}"
-
-          # 删除关联的标签
           curl -X DELETE \
             -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/${{ env.TAG_NAME }}"  
@@ -391,8 +385,6 @@ jobs:
           asset_name: openwrt.img
           tag: openwrt-${{ env.CURRENT_TIMESTAMP }}
           overwrite: true          
-            
-          
 
       - name: 删除上次运行记录
         env:
