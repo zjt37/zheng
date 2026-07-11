@@ -1,0 +1,23 @@
+name: Test Token
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test token
+        env:
+          TOKEN: ${{ secrets.SOURCE_REPO_TOKEN }}
+        run: |
+          echo "Token length: ${#TOKEN}"
+          if [ -z "$TOKEN" ]; then
+            echo "ERROR: SOURCE_REPO_TOKEN is empty!"
+            exit 1
+          fi
+          echo "Testing clone..."
+          git clone https://${TOKEN}@github.com/zjt37/packages.git /tmp/test-repo
+          cd /tmp/test-repo
+          git status
+          echo "Token works!"
