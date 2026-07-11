@@ -41,7 +41,7 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone https://github.com/vernesong/OpenClash.git
-          git clone https://github.com/xiaorouji/openwrt-passwall.git
+          git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
           git clone https://github.com/nikkinikki-org/OpenWrt-nikki.git
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./OpenWrt-nikki/nikki ./packages/
