@@ -10,13 +10,21 @@ jobs:
       - name: 清理磁盘空间
         uses: easimon/maximize-build-space@master
         with: 
-          root-reserve-mb: 2048
+          root-reserve-mb: 4096
           swap-size-mb: 1
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
           remove-codeql: 'true'
           remove-docker-images: 'true'
+          remove-codeql: 'true'
+
+      - name: 额外清理
+        run: |
+          sudo rm -rf /usr/local/lib/android /opt/ghc /usr/share/dotnet /usr/local/graalvm /usr/local/.ghcup
+          sudo rm -rf /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/node_modules
+          sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+          df -h
 
       - name: 安装系统依赖
         env:
