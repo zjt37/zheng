@@ -167,7 +167,7 @@ jobs:
           # CONFIG_KERNEL_XFS_POSIX_ACL is not set
           CONFIG_NODEJS_18=y
           # CONFIG_NODEJS_22 is not set
-          CONFIG_OPENSSH_LIBFIDO2=y
+          # CONFIG_OPENSSH_LIBFIDO2 is not set
           CONFIG_PACKAGE_6in4=y
           # CONFIG_PACKAGE_automount is not set
           # CONFIG_PACKAGE_autosamba is not set
@@ -289,14 +289,15 @@ jobs:
           CONFIG_PACKAGE_luci-theme-atmaterial_new=y
           # CONFIG_PACKAGE_miniupnpd is not set
           # CONFIG_PACKAGE_nlbwmon is not set
-          CONFIG_PACKAGE_openssh-client=y
-          CONFIG_PACKAGE_openssh-client-utils=y
-          CONFIG_PACKAGE_openssh-keygen=y
-          CONFIG_PACKAGE_openssh-moduli=y
+          # CONFIG_PACKAGE_openssh-client is not set
+          # CONFIG_PACKAGE_openssh-client-utils is not set
+          # CONFIG_PACKAGE_openssh-keygen is not set
+          # CONFIG_PACKAGE_openssh-moduli is not set
           CONFIG_PACKAGE_openssh-server=y
-          CONFIG_PACKAGE_openssh-sftp-avahi-service=y
-          CONFIG_PACKAGE_openssh-sftp-client=y
+          # CONFIG_PACKAGE_openssh-sftp-avahi-service is not set
+          # CONFIG_PACKAGE_openssh-sftp-client is not set
           CONFIG_PACKAGE_openssh-sftp-server=y
+          # CONFIG_PACKAGE_dropbear is not set
           CONFIG_PACKAGE_parted=y
           # CONFIG_PACKAGE_pdnsd-alt is not set
           CONFIG_PACKAGE_ruby=y
