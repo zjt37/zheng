@@ -17,7 +17,6 @@ jobs:
           remove-haskell: 'true'
           remove-codeql: 'true'
           remove-docker-images: 'true'
-          remove-codeql: 'true'
 
       - name: 额外清理
         run: |
