@@ -45,6 +45,14 @@ jobs:
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
 
+      - name: Download mihomo core for OpenClash
+        run: |
+          mkdir -p ./packages/luci-app-openclash/root/etc/openclash/core
+          MIHOMO_URL=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | test("linux-amd64-compatible")) | .browser_download_url')
+          wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz "$MIHOMO_URL"
+          gunzip ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz
+          chmod +x ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
+
       - name: Commit and push changes to target repository
         run: |
           cd packages
