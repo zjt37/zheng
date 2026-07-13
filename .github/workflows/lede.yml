@@ -293,11 +293,10 @@ jobs:
           # CONFIG_PACKAGE_openssh-client-utils is not set
           # CONFIG_PACKAGE_openssh-keygen is not set
           # CONFIG_PACKAGE_openssh-moduli is not set
-          CONFIG_PACKAGE_openssh-server=y
+          # CONFIG_PACKAGE_openssh-server is not set
           # CONFIG_PACKAGE_openssh-sftp-avahi-service is not set
           # CONFIG_PACKAGE_openssh-sftp-client is not set
           CONFIG_PACKAGE_openssh-sftp-server=y
-          # CONFIG_PACKAGE_dropbear is not set
           CONFIG_PACKAGE_parted=y
           # CONFIG_PACKAGE_pdnsd-alt is not set
           CONFIG_PACKAGE_ruby=y
