@@ -44,9 +44,6 @@ jobs:
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
-
-      - name: Download clash meta core for OpenClash
-        run: |
           mkdir -p ./packages/luci-app-openclash/root/etc/openclash/core
           wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
           tar -xzf ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C ./packages/luci-app-openclash/root/etc/openclash/core/
