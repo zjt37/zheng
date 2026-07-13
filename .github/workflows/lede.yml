@@ -132,8 +132,10 @@ jobs:
       - name: 常用配置修改
         run: |
           cd lede
-          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/luci2/bin/config_generate || sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
-          sed -i "s/hostname='.*'/hostname='openwrt'/g" package/base-files/luci2/bin/config_generate || sed -i "s/hostname='.*'/hostname='openwrt'/g" package/base-files/files/bin/config_generate
+          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/luci2/bin/config_generate
+          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
+          sed -i "s/hostname='.*'/hostname='openwrt'/g" package/base-files/luci2/bin/config_generate 
+          sed -i "s/hostname='.*'/hostname='openwrt'/g" package/base-files/files/bin/config_generate
           sed -i 's/KERNEL_PATCHVER:=6.6/KERNEL_PATCHVER:=6.12/g' ./target/linux/x86/Makefile
           sed -i 's/os.date()/os.date("%Y-%m-%d %H:%M:%S")/g' package/lean/autocore/files/*/index.htm
           sed -i 's/${g}.*/${a}${b}${c}${d}${e}${f}${hydrid}/g' package/lean/autocore/files/x86/autocore
