@@ -292,6 +292,7 @@ jobs:
           CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
           CONFIG_PACKAGE_luci-theme-atmaterial=y
           CONFIG_PACKAGE_custom-settings=y
+          CONFIG_PACKAGE_luci-app-systemupdate=y
           # CONFIG_PACKAGE_miniupnpd is not set
           # CONFIG_PACKAGE_nlbwmon is not set
           # CONFIG_PACKAGE_openssh-client is not set
