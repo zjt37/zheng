@@ -138,6 +138,7 @@ jobs:
           sed -i 's/os.date()/os.date("%Y-%m-%d %H:%M:%S")/g' package/lean/autocore/files/*/index.htm
           sed -i 's/${g}.*/${a}${b}${c}${d}${e}${f}${hydrid}/g' package/lean/autocore/files/x86/autocore
           sed -i 's/ShadowSocksR Plus+/SSR Plus+/g' package/feeds/helloworld/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
+          sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci/Makefile
 
       - name: 配置固件文件
         run: |
