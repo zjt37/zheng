@@ -389,6 +389,14 @@ jobs:
         run: |
           echo "CURRENT_TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
 
+      - name: 上传固件到Artifacts备份
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-firmware
+          path: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+          retention-days: 7
+
       - name: 发布固件
         uses: svenstaro/upload-release-action@v2
         with:
@@ -397,14 +405,6 @@ jobs:
           asset_name: openwrt.img
           tag: openwrt-${{ env.CURRENT_TIMESTAMP }}
           overwrite: true
-
-      - name: 上传固件到Artifacts备份
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: openwrt-firmware
-          path: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-          retention-days: 7
 
       - name: 删除上次运行记录
         env:
