@@ -396,7 +396,15 @@ jobs:
           file: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
           asset_name: openwrt.img
           tag: openwrt-${{ env.CURRENT_TIMESTAMP }}
-          overwrite: true          
+          overwrite: true
+
+      - name: 上传固件到Artifacts备份
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-firmware
+          path: lede/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+          retention-days: 7
 
       - name: 删除上次运行记录
         env:
