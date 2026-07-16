@@ -128,7 +128,7 @@ jobs:
           echo "src-git routing https://github.com/coolsnowwolf/routing" >> "feeds.conf.default"
           echo "src-git telephony https://github.com/openwrt/telephony.git" >> "feeds.conf.default"
           echo "src-git zheng https://github.com/zjt37/packages.git;main" >> "feeds.conf.default"
-          echo "src-git helloworld https://github.com/fw876/helloworld.git" >> "feeds.conf.default"
+
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           ./scripts/feeds install -a
@@ -141,7 +141,6 @@ jobs:
           sed -i 's/KERNEL_PATCHVER:=6.6/KERNEL_PATCHVER:=6.12/g' ./target/linux/x86/Makefile
           sed -i 's/os.date()/os.date("%Y-%m-%d %H:%M:%S")/g' package/lean/autocore/files/*/index.htm
           sed -i 's/${g}.*/${a}${b}${c}${d}${e}${f}${hydrid}/g' package/lean/autocore/files/x86/autocore
-          sed -i 's/ShadowSocksR Plus+/SSR Plus+/g' package/feeds/helloworld/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci/Makefile
 
       - name: 配置固件文件
@@ -279,10 +278,6 @@ jobs:
           CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
           # CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-ng is not set
           # CONFIG_PACKAGE_luci-app-rclone_INCLUDE_rclone-webui is not set
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ChinaDNS_NG=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Hysteria=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_IPT2Socks=y
-          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
           # CONFIG_PACKAGE_luci-app-turboacc is not set
           # CONFIG_PACKAGE_luci-app-turboacc_INCLUDE_BBR_CCA is not set
           # CONFIG_PACKAGE_luci-app-turboacc_INCLUDE_OFFLOADING is not set
