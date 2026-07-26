@@ -52,7 +52,6 @@ jobs:
           SMART_URL=$(curl -s "https://api.github.com/repos/vernesong/mihomo/releases/tags/Prerelease-Alpha" | grep -o '"browser_download_url": "[^"]*mihomo-linux-amd64-v2-alpha-smart[^"]*\.gz"' | head -1 | cut -d'"' -f4)
           wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz "$SMART_URL"
           gzip -df ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz
-          mv ./packages/luci-app-openclash/root/etc/openclash/core/mihomo-linux-amd64-v2* ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
           chmod +x ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
 
       - name: Commit and push changes to target repository
