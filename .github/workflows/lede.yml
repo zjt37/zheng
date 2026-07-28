@@ -48,10 +48,10 @@ jobs:
           rm -rf ./packages/openwrt-passwall-packages
           cp -r ./openwrt-passwall-packages ./packages/
           rm -rf ./packages/openwrt-passwall-packages/.git
-          mkdir -p ./packages/luci-app-openclash/root/etc/openclash/core
-          SMART_URL=$(curl -s "https://api.github.com/repos/vernesong/mihomo/releases/tags/Prerelease-Alpha" | grep -o '"browser_download_url": "[^"]*mihomo-linux-amd64-v2-alpha-smart[^"]*\.gz"' | head -1 | cut -d'"' -f4)
-          wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz "$SMART_URL"
-          gzip -df ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.gz
+          wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
+          tar -xzf ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C ./packages/luci-app-openclash/root/etc/openclash/core/
+          mv ./packages/luci-app-openclash/root/etc/openclash/core/clash ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
+          rm -f ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
           chmod +x ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
 
       - name: Commit and push changes to target repository
