@@ -134,6 +134,10 @@ jobs:
           ./scripts/feeds install -a
           ./scripts/feeds install -a
 
+      - name: 删除 LEDE 自带的 luci-app-mosdns
+        run: |
+          rm -rf lede/package/lean/luci-app-mosdns
+
       - name: 常用配置修改
         run: |
           cd lede
