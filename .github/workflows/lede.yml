@@ -41,9 +41,11 @@ jobs:
       - name: Copy folder from source to target
         run: |
           git clone https://github.com/vernesong/OpenClash.git
+          cp packages/luci-app-openclash/root/etc/config/openclash /tmp/openclash.conf.bak
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git
           cp -r ./OpenClash/luci-app-openclash ./packages/
+          cp /tmp/openclash.conf.bak ./packages/luci-app-openclash/root/etc/config/openclash
           cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           rm -rf ./packages/openwrt-passwall-packages
           cp -r ./openwrt-passwall-packages ./packages/
@@ -270,7 +272,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-diskman=y
           # CONFIG_PACKAGE_luci-app-ksmbd is not set
           CONFIG_PACKAGE_luci-app-mosdns=y
-          CONFIG_PACKAGE_luci-app-mosdns-panel=y
+          # CONFIG_PACKAGE_luci-app-mosdns-panel is not set
           # CONFIG_PACKAGE_luci-app-nlbwmon is not set
           CONFIG_PACKAGE_luci-app-openclash=y
           CONFIG_PACKAGE_luci-app-passwall=y
