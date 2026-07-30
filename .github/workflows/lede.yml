@@ -131,7 +131,7 @@ jobs:
           echo "src-git zheng https://github.com/zjt37/packages.git;main" >> "feeds.conf.default"
 
           ./scripts/feeds update -a
-          rm -rf lede/package/lean/luci-app-mosdns
+          rm -rf feeds/luci/applications/luci-app-mosdns
           ./scripts/feeds install -a
           ./scripts/feeds install -a
 
