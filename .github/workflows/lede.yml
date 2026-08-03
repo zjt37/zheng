@@ -55,6 +55,18 @@ jobs:
           mv ./packages/luci-app-openclash/root/etc/openclash/core/clash ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
           rm -f ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
           chmod +x ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
+          DIR=packages/luci-app-openclash/root/etc/openclash
+          wget -qO $DIR/GeoIP.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+          wget -qO $DIR/GeoSite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          wget -qO $DIR/Country.mmdb https://raw.githubusercontent.com/alecthw/mmdb_china_ip_list/release/lite/Country.mmdb
+          wget -qO $DIR/ASN.mmdb https://github.com/xishang0128/geoip/releases/latest/download/GeoLite2-ASN.mmdb
+          wget -qO /tmp/all_cn.txt https://ispip.clang.cn/all_cn.txt
+          echo "create china_ip_route hash:net family inet hashsize 1024 maxelem 1000000" > $DIR/china_ip_route.ipset
+          sed 's/^/add china_ip_route /' /tmp/all_cn.txt >> $DIR/china_ip_route.ipset
+          wget -qO /tmp/all_cn_ipv6.txt https://ispip.clang.cn/all_cn_ipv6.txt
+          echo "create china_ip6_route hash:net family inet6 hashsize 1024 maxelem 1000000" > $DIR/china_ip6_route.ipset
+          sed 's/^/add china_ip6_route /' /tmp/all_cn_ipv6.txt >> $DIR/china_ip6_route.ipset
+
 
       - name: Commit and push changes to target repository
         run: |
