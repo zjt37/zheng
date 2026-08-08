@@ -159,6 +159,7 @@ jobs:
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-layer2/Makefile
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-nginx/Makefile
+          rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
 
 
       - name: 配置固件文件
