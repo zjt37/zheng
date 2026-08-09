@@ -171,8 +171,6 @@ jobs:
           CONFIG_TARGET_x86=y
           CONFIG_TARGET_x86_64=y
           CONFIG_TARGET_x86_64_DEVICE_generic=y
-          CONFIG_DEVEL=y
-          CONFIG_EXPERIMENTAL=y
           CONFIG_GRUB_BOOTOPTS="console=tty1 loglevel=7 console=ttyS0,115200n8"
           # CONFIG_GRUB_CONSOLE is not set
           # CONFIG_GRUB_EFI_IMAGES is not set
@@ -205,6 +203,8 @@ jobs:
           CONFIG_OPENSSL_WITH_TLS13=y
           CONFIG_OPENSSL_WITH_WHIRLPOOL=y
           CONFIG_PACKAGE_bash=y
+          CONFIG_PACKAGE_blkid=y
+          CONFIG_PACKAGE_block-mount=y
           CONFIG_PACKAGE_cgi-io=y
           CONFIG_PACKAGE_chinadns-ng=y
           CONFIG_PACKAGE_coreutils=y
@@ -222,8 +222,6 @@ jobs:
           CONFIG_PACKAGE_dnsmasq_full_dnssec=y
           CONFIG_PACKAGE_dnsmasq_full_noid=y
           CONFIG_PACKAGE_dnsmasq_full_tftp=y
-          CONFIG_PACKAGE_f2fs-tools=y
-          CONFIG_PACKAGE_f2fsck=y
           CONFIG_PACKAGE_geoview=y
           # CONFIG_PACKAGE_grub2-efi is not set
           CONFIG_PACKAGE_haproxy=y
@@ -264,7 +262,6 @@ jobs:
           CONFIG_PACKAGE_libuci-lua=y
           CONFIG_PACKAGE_libudns=y
           CONFIG_PACKAGE_libyaml=y
-          CONFIG_PACKAGE_losetup=y
           CONFIG_PACKAGE_lua=y
           CONFIG_PACKAGE_luci=y
           CONFIG_PACKAGE_luci-app-firewall=y
@@ -354,9 +351,7 @@ jobs:
           CONFIG_SINGBOX_WITH_UTLS=y
           CONFIG_SINGBOX_WITH_WIREGUARD=y
           # CONFIG_TARGET_IMAGES_GZIP is not set
-          CONFIG_TARGET_KERNEL_PARTSIZE=64
           # CONFIG_TARGET_ROOTFS_EXT4FS is not set
-          CONFIG_TARGET_ROOTFS_PARTSIZE=256
           # CONFIG_TARGET_ROOTFS_TARGZ is not set
           EOF
           sed -i 's/^[ \t]*//g' ./.config
