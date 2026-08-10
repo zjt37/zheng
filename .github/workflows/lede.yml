@@ -156,13 +156,12 @@ jobs:
           cd openwrt
           sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
           sed -i 's/GMT0/CST-8/g' package/base-files/files/bin/config_generate
+          sed -i "s|hostname='OpenWrt'|hostname='openwrt'|g" package/base-files/files/bin/config_generate
           sed -i "s|zonename='UTC'|zonename='Asia/Shanghai'|g" package/base-files/files/bin/config_generate
           openssl passwd -1 'password' > hash.txt
           HASH=$(cat hash.txt)
           sed -i "s|^root:::0:99999:7:::|root:$HASH:0:0:99999:7:::|" package/base-files/files/etc/shadow
-          sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-layer2/Makefile
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
-          sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-nginx/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
 
 
