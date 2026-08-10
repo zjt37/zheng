@@ -66,6 +66,10 @@ jobs:
           wget -qO /tmp/all_cn_ipv6.txt https://ispip.clang.cn/all_cn_ipv6.txt
           echo "create china_ip6_route hash:net family inet6 hashsize 1024 maxelem 1000000" > $DIR/china_ip6_route.ipset
           sed 's/^/add china_ip6_route /' /tmp/all_cn_ipv6.txt >> $DIR/china_ip6_route.ipset
+          mkdir -p packages/luci-app-mosdns-plus/root/etc/mosdns/rule/adlist
+          wget -qO packages/luci-app-mosdns-plus/root/etc/mosdns/rule/adlist/anti-ad-domains.txt https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt
+          wget -qO packages/luci-app-mosdns-plus/root/etc/mosdns/rule/adlist/mosdns_adrules.txt https://raw.githubusercontent.com/Cats-Team/AdRules/main/mosdns_adrules.txt
+          wget -qO packages/luci-app-mosdns-plus/root/etc/mosdns/rule/adlist/domain https://raw.githubusercontent.com/neodevpro/neodevhost/master/domain
 
 
       - name: Commit and push changes to target repository
