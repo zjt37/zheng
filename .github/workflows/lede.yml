@@ -40,7 +40,8 @@ jobs:
 
       - name: Copy folder from source to target
         run: |
-          git clone https://github.com/vernesong/OpenClash.git
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/vernesong/OpenClash.git
+          cd OpenClash && git sparse-checkout set luci-app-openclash && cd ..
           cp packages/luci-app-openclash/root/etc/config/openclash /tmp/openclash.conf.bak
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git
