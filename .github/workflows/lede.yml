@@ -391,7 +391,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run another script
-        run: echo "This is job2, running after job1"
+        run: echo "This is job3, running after job1"
 
       - name: 清理磁盘空间
         uses: easimon/maximize-build-space@master
@@ -453,7 +453,7 @@ jobs:
       - name: 常用配置修改
         run: |
           cd openwrt
-          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
+          sed -i 's/192.168.1.1/192.168.2.30/g' package/base-files/files/bin/config_generate
           sed -i 's/GMT0/CST-8/g' package/base-files/files/bin/config_generate
           sed -i "s|hostname='OpenWrt'|hostname='openwrt'|g" package/base-files/files/bin/config_generate
           sed -i "s|zonename='UTC'|zonename='Asia/Shanghai'|g" package/base-files/files/bin/config_generate
