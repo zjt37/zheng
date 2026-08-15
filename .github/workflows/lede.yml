@@ -159,6 +159,7 @@ jobs:
           sed -i "s|^root:::0:99999:7:::|root:$HASH:0:0:99999:7:::|" package/base-files/files/etc/shadow
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
+          mkdir -p feeds/zheng/luci-app-openclash/root/etc/openclash/core
           wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
           tar -xzf feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C feeds/zheng/luci-app-openclash/root/etc/openclash/core/
           mv feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
@@ -462,7 +463,8 @@ jobs:
           sed -i "s|^root:::0:99999:7:::|root:$HASH:0:0:99999:7:::|" package/base-files/files/etc/shadow
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
-          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-arm64-v2.tar.gz
+          mkdir -p feeds/zheng/luci-app-openclash/root/etc/openclash/core
+          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-arm64.tar.gz
           tar -xzf feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C feeds/zheng/luci-app-openclash/root/etc/openclash/core/
           mv feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
           rm -f feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
