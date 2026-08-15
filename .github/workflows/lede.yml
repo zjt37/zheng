@@ -749,5 +749,6 @@ jobs:
           sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
           mkdir -p openwrt-armsr
           cp ../openwrt/bin/targets/armsr/armv8/openwrt-armsr-armv8-generic-rootfs.tar.gz openwrt-armsr/
+          sudo ./remake -b s905d -k 6.12.y -s 200/400
 
 
