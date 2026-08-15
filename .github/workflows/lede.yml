@@ -744,6 +744,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
           cd amlogic-s9xxx-openwrt
+          sed -i 's/"${boot_mb}" -ge 256/"${boot_mb}" -ge 64/; s/"${root_mb}" -ge 1024/"${root_mb}" -ge 128/' remake
           sudo apt-get update
           sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
           mkdir -p openwrt-armsr
