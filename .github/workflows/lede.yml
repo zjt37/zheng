@@ -751,4 +751,51 @@ jobs:
           cp ../openwrt/bin/targets/armsr/armv8/openwrt-armsr-armv8-generic-rootfs.tar.gz openwrt-armsr/
           sudo ./remake -b s905d -k 6.12.y -s 200/400
 
+      - name: 重命名固件
+        run: |
+          cd amlogic-s9xxx-openwrt/openwrt/out
+          cp openwrt_amlogic_s905d_k6.12.103_*.img openwrt_n1.img
+
+      - name: 获取release ID
+        id: get-release
+        run: |
+          RELEASE_JSON=$(curl -s -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+          RELEASE_ID=$(echo "$RELEASE_JSON" | jq -r '.id')
+          TAG_NAME=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+
+      - name: 删除上次release
+        if: env.RELEASE_ID != 'null'
+        run: |
+          curl -X DELETE \
+            -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}"
+          curl -X DELETE \
+            -H "Authorization: token ${{ secrets.SOURCE_REPO_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/${{ env.TAG_NAME }}"
+
+      - name: 获取发布时间
+        id: timestamp
+        run: |
+          echo "CURRENT_TIMESTAMP=$(date -u +"%Y%m%d%H%M%S")" >> $GITHUB_ENV
+
+      - name: 上传固件到Artifacts备份
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-n1-firmware
+          path: amlogic-s9xxx-openwrt/openwrt/out/openwrt_n1.img
+          retention-days: 7
+
+      - name: 发布固件
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
+          file: amlogic-s9xxx-openwrt/openwrt/out/openwrt_n1.img
+          asset_name: openwrt_n1.img
+          tag: openwrt-n1-${{ env.CURRENT_TIMESTAMP }}
+          overwrite: true
+
 
