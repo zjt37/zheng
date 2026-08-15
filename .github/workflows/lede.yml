@@ -742,11 +742,21 @@ jobs:
 
       - name: 拉取打包源码
         run: |
-          git clone --depth 1 https://github.com/ophub/make-openwrt.git
+          git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
 
       - name: 安装打包依赖
         run: |
+          cd amlogic-s9xxx-openwrt
           sudo apt-get update
           sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
+
+      - name: 进入打包目录
+        run: |
+          cd amlogic-s9xxx-openwrt
+
+      - name: 复制固件到打包目录
+        run: |
+          mkdir -p openwrt-armsr
+          cp ../openwrt/bin/targets/armsr/armv8/openwrt-armsr-armv8-generic-rootfs.tar.gz openwrt-armsr/
 
 
