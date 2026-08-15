@@ -740,3 +740,13 @@ jobs:
           echo -e "$(nproc) thread build."
           make -j$(nproc) V=s
 
+      - name: 拉取打包源码
+        run: |
+          git clone --depth 1 https://github.com/ophub/make-openwrt.git
+
+      - name: 安装打包依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y $(cat make-openwrt/scripts/ubuntu2404-make-openwrt-depends)
+
+
