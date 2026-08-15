@@ -428,3 +428,307 @@ jobs:
             | jq -r '.workflow_runs[1].id')
           curl -X DELETE -H "Authorization: token $GH_TOKEN" \
             https://api.github.com/repos/${{ github.repository }}/actions/runs/$previous_run_id
+  job3:
+    runs-on: ubuntu-22.04
+    needs: job1
+
+    steps:
+      - name: 准备开始
+        uses: actions/checkout@v4
+
+      - name: Run another script
+        run: echo "This is job2, running after job1"
+
+      - name: 清理磁盘空间
+        uses: easimon/maximize-build-space@master
+        with: 
+          root-reserve-mb: 4096
+          swap-size-mb: 1
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
+
+      - name: 额外清理
+        run: |
+          sudo rm -rf /usr/local/lib/android /opt/ghc /usr/share/dotnet /usr/local/graalvm /usr/local/.ghcup
+          sudo rm -rf /usr/local/share/powershell /usr/local/share/chromium /usr/local/lib/node_modules
+          sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+          df -h /
+
+      - name: 安装系统依赖
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
+          bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gettext genisoimage \
+          gcc-multilib g++-multilib git gperf haveged help2man intltool libc6-dev-i386 libelf-dev \
+          libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libnsl-dev \
+          libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool llvm lrzsz \
+          nano ninja-build p7zip p7zip-full patch pkgconf python3 python3-pyelftools python3-setuptools \
+          qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip \
+          vim wget xmlto xxd zlib1g-dev
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+          sudo -E timedatectl set-timezone "Asia/Shanghai"
+      
+      - name: 下载固件源码
+        working-directory: ./
+        run: |
+          git clone -b openwrt-25.12 https://github.com/openwrt/openwrt.git
+
+      - name: 更新和安装软件包
+        run: |
+          cd openwrt
+          rm -f ./feeds.conf.default
+          touch ./feeds.conf.default
+          echo "src-git packages https://github.com/openwrt/packages.git;openwrt-25.12" >> "feeds.conf.default"
+          echo "src-git luci https://github.com/openwrt/luci.git;openwrt-25.12" >> "feeds.conf.default"
+          echo "src-git routing https://github.com/openwrt/routing.git;openwrt-25.12" >> "feeds.conf.default"
+          echo "src-git telephony https://github.com/openwrt/telephony.git;openwrt-25.12" >> "feeds.conf.default"
+          echo "src-git video https://github.com/openwrt/video.git;openwrt-25.12" >> "feeds.conf.default"
+          echo "src-git zheng https://github.com/zjt37/packages.git;main" >> "feeds.conf.default"
+
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          ./scripts/feeds install -a
+
+      - name: 常用配置修改
+        run: |
+          cd openwrt
+          sed -i 's/192.168.1.1/192.168.2.3/g' package/base-files/files/bin/config_generate
+          sed -i 's/GMT0/CST-8/g' package/base-files/files/bin/config_generate
+          sed -i "s|hostname='OpenWrt'|hostname='openwrt'|g" package/base-files/files/bin/config_generate
+          sed -i "s|zonename='UTC'|zonename='Asia/Shanghai'|g" package/base-files/files/bin/config_generate
+          openssl passwd -1 'password' > hash.txt
+          HASH=$(cat hash.txt)
+          sed -i "s|^root:::0:99999:7:::|root:$HASH:0:0:99999:7:::|" package/base-files/files/etc/shadow
+          sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
+          rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
+
+
+      - name: 配置固件文件
+        run: |
+          cd openwrt
+          rm -f ./.config*
+          touch ./.config
+          cat >> .config <<EOF
+          CONFIG_TARGET_armsr=y
+          CONFIG_TARGET_armsr_armv8=y
+          CONFIG_TARGET_armsr_armv8_DEVICE_generic=y
+          CONFIG_LIBCURL_COOKIES=y
+          CONFIG_LIBCURL_FILE=y
+          CONFIG_LIBCURL_FTP=y
+          CONFIG_LIBCURL_HTTP=y
+          CONFIG_LIBCURL_HTTP2=y
+          CONFIG_LIBCURL_HTTP_AUTH=y
+          CONFIG_LIBCURL_MBEDTLS=y
+          CONFIG_LIBCURL_NO_SMB="!"
+          CONFIG_LIBCURL_PROXY=y
+          CONFIG_LIBCURL_UNIX_SOCKETS=y
+          CONFIG_LIBCURL_ZLIB=y
+          CONFIG_LIBSODIUM_MINIMAL=y
+          CONFIG_LUCI_LANG_zh_Hans=y
+          CONFIG_OPENSSL_ENGINE=y
+          CONFIG_OPENSSL_WITH_ASM=y
+          CONFIG_OPENSSL_WITH_CHACHA_POLY1305=y
+          CONFIG_OPENSSL_WITH_CMS=y
+          CONFIG_OPENSSL_WITH_DEPRECATED=y
+          CONFIG_OPENSSL_WITH_ERROR_MESSAGES=y
+          CONFIG_OPENSSL_WITH_IDEA=y
+          CONFIG_OPENSSL_WITH_MDC2=y
+          CONFIG_OPENSSL_WITH_PSK=y
+          CONFIG_OPENSSL_WITH_SEED=y
+          CONFIG_OPENSSL_WITH_SRP=y
+          CONFIG_OPENSSL_WITH_TLS13=y
+          CONFIG_OPENSSL_WITH_WHIRLPOOL=y
+          CONFIG_PACKAGE_bash=y
+          CONFIG_PACKAGE_btrfs-progs=y
+          CONFIG_PACKAGE_cgi-io=y
+          CONFIG_PACKAGE_chinadns-ng=y
+          CONFIG_PACKAGE_coreutils=y
+          CONFIG_PACKAGE_coreutils-base64=y
+          CONFIG_PACKAGE_coreutils-nohup=y
+          CONFIG_PACKAGE_coreutils-timeout=y
+          CONFIG_PACKAGE_curl=y
+          CONFIG_PACKAGE_custom-boot=y
+          CONFIG_PACKAGE_dns2socks=y
+          CONFIG_PACKAGE_dnsmasq-full=y
+          CONFIG_PACKAGE_dnsmasq_full_auth=y
+          CONFIG_PACKAGE_dnsmasq_full_conntrack=y
+          CONFIG_PACKAGE_dnsmasq_full_dhcp=y
+          CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
+          CONFIG_PACKAGE_dnsmasq_full_dnssec=y
+          CONFIG_PACKAGE_dnsmasq_full_noid=y
+          CONFIG_PACKAGE_dnsmasq_full_tftp=y
+          CONFIG_PACKAGE_dosfstools=y
+          CONFIG_PACKAGE_fdisk=y
+          CONFIG_PACKAGE_geoview=y
+          # CONFIG_PACKAGE_grub2-efi-arm is not set
+          CONFIG_PACKAGE_haproxy=y
+          CONFIG_PACKAGE_ip-full=y
+          CONFIG_PACKAGE_ipt2socks=y
+          CONFIG_PACKAGE_jq=y
+          CONFIG_PACKAGE_kmod-crypto-acompress=y
+          CONFIG_PACKAGE_kmod-crypto-blake2b=y
+          CONFIG_PACKAGE_kmod-crypto-xxhash=y
+          CONFIG_PACKAGE_kmod-fs-btrfs=y
+          CONFIG_PACKAGE_kmod-inet-diag=y
+          CONFIG_PACKAGE_kmod-lib-lzo=y
+          CONFIG_PACKAGE_kmod-lib-raid6=y
+          CONFIG_PACKAGE_kmod-lib-xor=y
+          CONFIG_PACKAGE_kmod-lib-xxhash=y
+          CONFIG_PACKAGE_kmod-lib-zlib-deflate=y
+          CONFIG_PACKAGE_kmod-lib-zlib-inflate=y
+          CONFIG_PACKAGE_kmod-lib-zstd=y
+          CONFIG_PACKAGE_kmod-nf-conntrack-netlink=y
+          CONFIG_PACKAGE_kmod-nf-socket=y
+          CONFIG_PACKAGE_kmod-nft-socket=y
+          CONFIG_PACKAGE_kmod-tun=y
+          CONFIG_PACKAGE_libatomic=y
+          CONFIG_PACKAGE_libattr=y
+          CONFIG_PACKAGE_libbpf=y
+          CONFIG_PACKAGE_libcurl=y
+          CONFIG_PACKAGE_libelf=y
+          CONFIG_PACKAGE_libev=y
+          CONFIG_PACKAGE_libfdisk=y
+          CONFIG_PACKAGE_libgmp=y
+          CONFIG_PACKAGE_libiwinfo=y
+          CONFIG_PACKAGE_libiwinfo-data=y
+          CONFIG_PACKAGE_libltdl=y
+          CONFIG_PACKAGE_liblua=y
+          CONFIG_PACKAGE_liblua5.4=y
+          CONFIG_PACKAGE_liblucihttp=y
+          CONFIG_PACKAGE_liblucihttp-lua=y
+          CONFIG_PACKAGE_liblucihttp-ucode=y
+          CONFIG_PACKAGE_liblzo=y
+          CONFIG_PACKAGE_libmount=y
+          CONFIG_PACKAGE_libncurses=y
+          CONFIG_PACKAGE_libnetfilter-conntrack=y
+          CONFIG_PACKAGE_libnettle=y
+          CONFIG_PACKAGE_libnfnetlink=y
+          CONFIG_PACKAGE_libnghttp2=y
+          CONFIG_PACKAGE_libopenssl=y
+          CONFIG_PACKAGE_libpcre2=y
+          CONFIG_PACKAGE_libreadline=y
+          CONFIG_PACKAGE_libruby=y
+          CONFIG_PACKAGE_libsodium=y
+          CONFIG_PACKAGE_libubus-lua=y
+          CONFIG_PACKAGE_libuci-lua=y
+          CONFIG_PACKAGE_libudns=y
+          CONFIG_PACKAGE_libyaml=y
+          CONFIG_PACKAGE_losetup=y
+          CONFIG_PACKAGE_lsblk=y
+          CONFIG_PACKAGE_lua=y
+          CONFIG_PACKAGE_luci=y
+          CONFIG_PACKAGE_luci-app-firewall=y
+          CONFIG_PACKAGE_luci-app-mosdns-plus=y
+          CONFIG_PACKAGE_luci-app-n1update=y
+          CONFIG_PACKAGE_luci-app-openclash=y
+          CONFIG_PACKAGE_luci-app-package-manager=y
+          CONFIG_PACKAGE_luci-app-passwall=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Geoview=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
+          CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
+          CONFIG_PACKAGE_luci-base=y
+          CONFIG_PACKAGE_luci-compat=y
+          CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-firewall-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-mosdns-plus-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-package-manager-zh-cn=y
+          CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
+          CONFIG_PACKAGE_luci-lib-base=y
+          CONFIG_PACKAGE_luci-lib-ip=y
+          CONFIG_PACKAGE_luci-lib-jsonc=y
+          CONFIG_PACKAGE_luci-lib-nixio=y
+          CONFIG_PACKAGE_luci-lib-uqr=y
+          CONFIG_PACKAGE_luci-light=y
+          CONFIG_PACKAGE_luci-lua-runtime=y
+          CONFIG_PACKAGE_luci-mod-admin-full=y
+          CONFIG_PACKAGE_luci-mod-network=y
+          CONFIG_PACKAGE_luci-mod-status=y
+          CONFIG_PACKAGE_luci-mod-system=y
+          CONFIG_PACKAGE_luci-proto-ipv6=y
+          CONFIG_PACKAGE_luci-proto-ppp=y
+          CONFIG_PACKAGE_luci-theme-atmaterial=y
+          CONFIG_PACKAGE_lyaml=y
+          CONFIG_PACKAGE_microsocks=y
+          CONFIG_PACKAGE_mosdns=y
+          CONFIG_PACKAGE_openssh-sftp-server=y
+          CONFIG_PACKAGE_resolveip=y
+          CONFIG_PACKAGE_rpcd=y
+          CONFIG_PACKAGE_rpcd-mod-file=y
+          CONFIG_PACKAGE_rpcd-mod-iwinfo=y
+          CONFIG_PACKAGE_rpcd-mod-luci=y
+          CONFIG_PACKAGE_rpcd-mod-rrdns=y
+          CONFIG_PACKAGE_rpcd-mod-ucode=y
+          CONFIG_PACKAGE_ruby=y
+          CONFIG_PACKAGE_ruby-bigdecimal=y
+          CONFIG_PACKAGE_ruby-date=y
+          CONFIG_PACKAGE_ruby-digest=y
+          CONFIG_PACKAGE_ruby-enc=y
+          CONFIG_PACKAGE_ruby-pstore=y
+          CONFIG_PACKAGE_ruby-psych=y
+          CONFIG_PACKAGE_ruby-stringio=y
+          CONFIG_PACKAGE_ruby-yaml=y
+          CONFIG_PACKAGE_shadowsocks-rust-sslocal=y
+          CONFIG_PACKAGE_shadowsocksr-libev-ssr-local=y
+          CONFIG_PACKAGE_shadowsocksr-libev-ssr-redir=y
+          CONFIG_PACKAGE_simple-obfs-client=y
+          CONFIG_PACKAGE_sing-box=y
+          CONFIG_PACKAGE_sshtunnel=y
+          CONFIG_PACKAGE_tcping=y
+          CONFIG_PACKAGE_terminfo=y
+          CONFIG_PACKAGE_ucode-mod-html=y
+          CONFIG_PACKAGE_ucode-mod-log=y
+          CONFIG_PACKAGE_ucode-mod-lua=y
+          CONFIG_PACKAGE_ucode-mod-math=y
+          CONFIG_PACKAGE_uhttpd=y
+          CONFIG_PACKAGE_uhttpd-mod-ubus=y
+          CONFIG_PACKAGE_unzip=y
+          CONFIG_PACKAGE_uuidgen=y
+          CONFIG_PACKAGE_v2dat=y
+          CONFIG_PACKAGE_v2ray-geoip=y
+          CONFIG_PACKAGE_v2ray-geosite=y
+          CONFIG_PACKAGE_v2ray-plugin=y
+          CONFIG_PACKAGE_xray-core=y
+          CONFIG_PCRE2_JIT_ENABLED=y
+          CONFIG_RUBY_ENABLE_YJIT=y
+          CONFIG_SINGBOX_WITH_CLASH_API=y
+          CONFIG_SINGBOX_WITH_GVISOR=y
+          CONFIG_SINGBOX_WITH_QUIC=y
+          CONFIG_SINGBOX_WITH_TAILSCALE=y
+          CONFIG_SINGBOX_WITH_UTLS=y
+          CONFIG_SINGBOX_WITH_WIREGUARD=y
+          # CONFIG_TARGET_IMAGES_GZIP is not set
+          # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
+          # CONFIG_TARGET_ROOTFS_EXT4FS is not set
+          # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
+          # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+
+          EOF
+          sed -i 's/^[ \t]*//g' ./.config
+          make defconfig
+  
+      - name: 下载DL库
+        run: |
+          cd openwrt
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+
+      - name: 开始编译固件
+        run: |
+          cd openwrt
+          echo -e "$(nproc) thread build."
+          make -j$(nproc) V=s
+
