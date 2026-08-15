@@ -754,7 +754,7 @@ jobs:
       - name: 重命名固件
         run: |
           cd amlogic-s9xxx-openwrt/openwrt/out
-          cp openwrt_amlogic_s905d_k6.12.103_*.img openwrt_n1.img
+          cp openwrt_amlogic_s905d_*.img openwrt_n1.img
 
       - name: 上传固件到Artifacts备份
         if: always()
