@@ -764,4 +764,12 @@ jobs:
           path: amlogic-s9xxx-openwrt/openwrt/out/openwrt_n1.img
           retention-days: 7
 
+  job4:
+    runs-on: ubuntu-22.04
+    needs: [job2, job3]
+
+    steps:
+      - name: 准备开始
+        uses: actions/checkout@v4
+
 
