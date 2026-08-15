@@ -772,4 +772,21 @@ jobs:
       - name: 准备开始
         uses: actions/checkout@v4
 
+      - name: 下载job2固件
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-firmware
+          path: firmware
+
+      - name: 下载job3固件
+        uses: actions/download-artifact@v4
+        with:
+          name: openwrt-n1-firmware
+          path: firmware
+
+      - name: 重命名固件
+        run: |
+          mv firmware/openwrt-x86-64-generic-squashfs-combined.img openwrt.img
+          mv firmware/openwrt_n1.img openwrt_n1.img
+
 
