@@ -51,11 +51,6 @@ jobs:
           rm -rf ./packages/openwrt-passwall-packages
           cp -r ./openwrt-passwall-packages ./packages/
           rm -rf ./packages/openwrt-passwall-packages/.git
-          wget -O ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
-          tar -xzf ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C ./packages/luci-app-openclash/root/etc/openclash/core/
-          mv ./packages/luci-app-openclash/root/etc/openclash/core/clash ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
-          rm -f ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
-          chmod +x ./packages/luci-app-openclash/root/etc/openclash/core/clash_meta
           DIR=packages/luci-app-openclash/root/etc/openclash
           wget -qO $DIR/GeoIP.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
           wget -qO $DIR/GeoSite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
@@ -164,6 +159,15 @@ jobs:
           sed -i "s|^root:::0:99999:7:::|root:$HASH:0:0:99999:7:::|" package/base-files/files/etc/shadow
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
+      - name: 下载openclash内核
+        run: |
+          cd openwrt
+          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
+          tar -xzf feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C feeds/zheng/luci-app-openclash/root/etc/openclash/core/
+          mv feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
+          rm -f feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
+          chmod +x feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
+
 
 
       - name: 配置固件文件
