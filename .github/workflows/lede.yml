@@ -770,6 +770,7 @@ jobs:
         with:
           repo_token: ${{ secrets.SOURCE_REPO_TOKEN }}
           file: openwrt*.img
+          file_glob: true
           tag: openwrt-${{ env.CURRENT_TIMESTAMP }}
           overwrite: true
 
