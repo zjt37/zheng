@@ -709,6 +709,7 @@ jobs:
       - name: 重命名固件
         run: |
           cd amlogic-s9xxx-openwrt/openwrt/out
+          gunzip openwrt_amlogic_s905d_*.img.gz
           cp openwrt_amlogic_s905d_*.img openwrt_n1.img
 
       - name: 上传固件到Artifacts备份
