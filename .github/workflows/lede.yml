@@ -43,6 +43,8 @@ jobs:
           git clone --depth 1 --filter=blob:none --sparse https://github.com/vernesong/OpenClash.git
           cd OpenClash && git sparse-checkout set luci-app-openclash && cd ..
           cp packages/luci-app-openclash/root/etc/config/openclash /tmp/openclash.conf.bak
+          git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
+          cp -r ./openwrt-passwall/luci-app-passwall ./packages/
           git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git
           cp -r ./OpenClash/luci-app-openclash ./packages/
           cp /tmp/openclash.conf.bak ./packages/luci-app-openclash/root/etc/config/openclash
