@@ -162,7 +162,7 @@ jobs:
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
           mkdir -p feeds/zheng/luci-app-openclash/root/etc/openclash/core
-          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-amd64-v2.tar.gz
+          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/smart/clash-linux-amd64-v2.tar.gz
           tar -xzf feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C feeds/zheng/luci-app-openclash/root/etc/openclash/core/
           mv feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
           rm -f feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
@@ -468,7 +468,7 @@ jobs:
           sed -i 's/+luci-theme-bootstrap/+luci-theme-atmaterial/g' feeds/luci/collections/luci-light/Makefile
           rm -f package/base-files/files/etc/profile.d/apk-cheatsheet.sh
           mkdir -p feeds/zheng/luci-app-openclash/root/etc/openclash/core
-          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/meta/clash-linux-arm64.tar.gz
+          wget -O feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz https://raw.githubusercontent.com/vernesong/OpenClash/core/master/smart/clash-linux-arm64.tar.gz
           tar -xzf feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz -C feeds/zheng/luci-app-openclash/root/etc/openclash/core/
           mv feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta
           rm -f feeds/zheng/luci-app-openclash/root/etc/openclash/core/clash_meta.tar.gz
