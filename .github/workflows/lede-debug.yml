@@ -293,23 +293,4 @@ jobs:
         with:
           limit-access-to-actor: true
 
-      - name: 下载DL库
-        run: |
-          cd openwrt
-          make download -j8
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
-
-      - name: 开始编译固件
-        run: |
-          cd openwrt
-          echo -e "$(nproc) thread build."
-          make -j$(nproc) V=s
-
-      - name: 上传固件到Artifacts备份
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: openwrt-firmware-debug
-          path: openwrt/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-          retention-days: 7
+     
