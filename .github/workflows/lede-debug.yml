@@ -286,11 +286,9 @@ jobs:
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
 
-      - name: 进入SSH查看.config(退出tmate后自动继续编译)
+      - name: SSH connection to Actions
         continue-on-error: true
         timeout-minutes: 20
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
+        uses: P3TERX/ssh2actions@v1.0.0
 
      
