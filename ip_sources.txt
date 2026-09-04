@@ -1,6 +1,0 @@
-# CF优选IP来源 (每行一个URL，#开头为注释)
-https://bestcf.pages.dev/random-region/HK/10.txt
-https://bestcf.pages.dev/random-region/TW/10.txt
-https://bestcf.pages.dev/random-region/SG/10.txt
-https://bestcf.pages.dev/random-region/JP/10.txt
-https://bestcf.pages.dev/random-region/US/10.txt
